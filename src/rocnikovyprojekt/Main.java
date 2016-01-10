@@ -1,33 +1,30 @@
 package rocnikovyprojekt;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 
 public class Main {
 
 	public static void main(String[] args) {
-		/* DeterministicFiniteAutomaton.TransitionFunction function = 
+		DeterministicFiniteAutomaton.TransitionFunction f1 = 
 				new DeterministicFiniteAutomaton.TransitionFunction();
-		function.put(0, 'h', 1);
-		function.put(1, 'o', 0);
+		f1.put(0, 'h', 1);
+		f1.put(1, 'o', 0);
 		HashSet<Object> finalStates = new HashSet<>();
 		finalStates.add(0);
-		DeterministicFiniteAutomaton machine = new DeterministicFiniteAutomaton(
-				function, 0, finalStates);
+		DeterministicFiniteAutomaton m1 = new DeterministicFiniteAutomaton(
+				f1, 0, finalStates);
 		Word w = new Word();
-		w.add('h');
-		w.add('o');
-		w.add('h');
-		w.add('o');
+		w.append('h');
+		w.append('o');
+		w.append('h');
+		w.append('o');
 		
-		if (machine.accepts(w)) {
-			System.out.println("akceptujem");
+		if (m1.accepts(w)) {
+			System.out.println("M1 akceptuje");
 		} else {
-			System.out.println("neakceptujem");
+			System.out.println("M1 neakceptuje");
 		}
-		
-		for (FiniteAutomaton.Configuration conf : machine.getLastComputation()) {
-			System.out.println(conf.getPosition() + ", " + conf.getState());
-		} */
 		
 		NondeterministicFiniteAutomaton.TransitionFunction f2 =
 				new NondeterministicFiniteAutomaton.TransitionFunction();
@@ -47,15 +44,52 @@ public class Main {
 		NondeterministicFiniteAutomaton m2 =
 				new NondeterministicFiniteAutomaton(f2, 0, set);
 		
-		Word w = new Word();
+		w = new Word();
 		w.append('a');
 		w.append('a');
 		w.append('a');
 		w.append('b');
 		if (m2.accepts(w)) {
-			System.out.println("m2 akceptuje");
+			System.out.println("M2 akceptuje");
 		} else {
-			System.out.println("m2 neakceptuje");
+			System.out.println("M2 neakceptuje");
 		}
+		
+		DeterministicPushdownAutomaton.TransitionFunction f3 =
+				new DeterministicPushdownAutomaton.TransitionFunction();
+		ArrayList<Object> list = new ArrayList<>();
+		list.add('z');
+		f3.put(0, 'a', 'z', 1, list);
+		list = new ArrayList<>();
+		list.add('z');
+		list.add('a');
+		f3.put(1, 'a', 'z', 1, list);
+		list = new ArrayList<>();
+		list.add('a');
+		list.add('a');
+		f3.put(1, 'a', 'a', 1, list);
+		list = new ArrayList<>();
+		f3.put(1, 'b', 'a', 2, list);
+		f3.put(2, 'b', 'a', 2, list);
+		f3.put(2, 'b', 'z', 0, list);
+		f3.put(1, 'b', 'z', 0, list);
+		set = new HashSet<>();
+		set.add(0);
+		DeterministicPushdownAutomaton m3 =
+				new DeterministicPushdownAutomaton(f3, 0, 'z', set);
+		
+		w = new Word();
+		w.append('a');
+		w.append('a');
+		w.append('a');
+		w.append('b');
+		w.append('b');
+		w.append('b');
+		if (m3.accepts(w)) {
+			System.out.println("M3 akceptuje");
+		} else {
+			System.out.println("M3 neakceptuje");
+		}
+
 	}
 }

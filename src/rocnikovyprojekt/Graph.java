@@ -17,15 +17,15 @@ import java.util.Map.Entry;
  * @author Dodo
  */
 public class Graph {
-    private Map<Class<? extends Automaton>, Vertex> map;
+    private Map<Class<? extends FiniteDescription>, Vertex> map;
     
     public Graph(){
         map = new HashMap<>();
     }
     
     public void addEdge(Conversion conv){
-        Class<? extends Automaton> afrom = conv.getFrom();
-        Class<? extends Automaton> ato = conv.getTo();
+        Class<? extends FiniteDescription> afrom = conv.getFrom();
+        Class<? extends FiniteDescription> ato = conv.getTo();
         if(!map.containsKey(afrom)){
             map.put(afrom, new Vertex(afrom));
         }
@@ -35,7 +35,7 @@ public class Graph {
         map.get(afrom).addEdge(map.get(ato), conv);
     }
     
-    public List<Conversion> getShortestPath(Class<? extends Automaton> afrom, Class<? extends Automaton> ato){
+    public List<Conversion> getShortestPath(Class<? extends FiniteDescription> afrom, Class<? extends FiniteDescription> ato){
         Vertex from = map.get(afrom);
         Vertex to = map.get(ato);
         Map<Vertex, Edge> prev = new HashMap<>();
@@ -64,7 +64,7 @@ public class Graph {
     }
     
     void print(){
-        for(Entry<Class<? extends Automaton>, Vertex> entry : map.entrySet()){
+        for(Entry<Class<? extends FiniteDescription>, Vertex> entry : map.entrySet()){
             Vertex v = entry.getValue();
             System.out.print(entry.getKey().getName() + ": ");
             for(Edge e : v.getOutcommingEdges()){

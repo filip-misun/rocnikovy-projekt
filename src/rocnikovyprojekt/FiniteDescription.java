@@ -9,12 +9,12 @@ package rocnikovyprojekt;
  *
  * @author Dodo
  */
-public interface Automaton {
+public interface FiniteDescription {
 }
 
 /*Zopar tried na ilustraciu fungovania:*/
 
-class A1 implements Automaton{
+class A1 implements FiniteDescription{
     int a;
     int b;
     
@@ -24,7 +24,7 @@ class A1 implements Automaton{
     }
 }
 
-class A2 implements Automaton{
+class A2 implements FiniteDescription{
     int x;
     
     public A2(int x_){
@@ -32,7 +32,7 @@ class A2 implements Automaton{
     }
 }
 
-class A3 implements Automaton{
+class A3 implements FiniteDescription{
     String s;
     
     public A3(String s_){
@@ -40,7 +40,7 @@ class A3 implements Automaton{
     }
 }
 
-class A4 implements Automaton{
+class A4 implements FiniteDescription{
     String s;
     int a;
     

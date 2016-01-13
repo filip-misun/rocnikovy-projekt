@@ -13,15 +13,15 @@ import java.util.List;
  * @author Dodo
  */
 public class Vertex {
-    Class<? extends Automaton> data;
+    Class<? extends FiniteDescription> data;
     List<Edge> edges;
     
-    public Vertex(Class<? extends Automaton> d){
+    public Vertex(Class<? extends FiniteDescription> d){
         data = d;
         edges = new LinkedList<>();
     }
     
-    public Class<? extends Automaton> getData(){
+    public Class<? extends FiniteDescription> getData(){
         return data;
     }
     

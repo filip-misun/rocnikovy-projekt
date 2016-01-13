@@ -46,7 +46,7 @@ public class Conversions {
      * @param toClass
      * @return 
      */
-    public Automaton convert(Automaton afrom, Class<? extends Automaton> toClass){
+    public FiniteDescription convert(FiniteDescription afrom, Class<? extends FiniteDescription> toClass){
         System.out.println("Convert start...");
         /*Najde v grafe najkarsiu cestu pre prevod.*/
         List<Conversion> path =

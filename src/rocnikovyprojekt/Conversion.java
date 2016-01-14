@@ -20,7 +20,11 @@ public interface Conversion {
 class C1to2 implements Conversion{
 
     @Override
-    public FiniteDescription convert(FiniteDescription a) {
+    public FiniteDescription convert(FiniteDescription a){
+        return convert((A1) a);
+    }
+    
+    public A2 convert(A1 a) {
         A1 a1 = (A1) a;
         return new A2(a1.a + a1.b);
     }
@@ -40,9 +44,12 @@ class C1to2 implements Conversion{
 class C1to3 implements Conversion{
 
     @Override
-    public FiniteDescription convert(FiniteDescription a) {
-        A1 a1 = (A1) a;
-        return new A3(a1.a + "," + a1.b);
+    public FiniteDescription convert(FiniteDescription a){
+        return convert((A1) a);
+    }
+    
+    public A3 convert(A1 a) {
+        return new A3(a.a + "," + a.b);
     }
 
     @Override
@@ -60,9 +67,12 @@ class C1to3 implements Conversion{
 class C3to2 implements Conversion{
 
     @Override
-    public FiniteDescription convert(FiniteDescription a) {
-        A3 a3 = (A3) a;
-        return new A2(a3.s.length());
+    public FiniteDescription convert(FiniteDescription a){
+        return convert((A3) a);
+    }
+    
+    public A2 convert(A3 a) {
+        return new A2(a.s.length());
     }
 
     @Override
@@ -80,9 +90,12 @@ class C3to2 implements Conversion{
 class C2to1 implements Conversion{
 
     @Override
-    public FiniteDescription convert(FiniteDescription a) {
-        A2 a2 = (A2) a;
-        return new A1(a2.x,47);
+    public FiniteDescription convert(FiniteDescription a){
+        return convert((A2) a);
+    }
+    
+    public A1 convert(A2 a) {
+        return new A1(a.x,47);
     }
 
     @Override
@@ -100,9 +113,12 @@ class C2to1 implements Conversion{
 class C4to3 implements Conversion{
 
     @Override
-    public FiniteDescription convert(FiniteDescription a) {
-        A4 a4 = (A4) a;
-        return new A3(a4.s);
+    public FiniteDescription convert(FiniteDescription a){
+        return convert((A4) a);
+    }
+    
+    public A3 convert(A4 a) {
+        return new A3(a.s);
     }
 
     @Override
@@ -120,9 +136,12 @@ class C4to3 implements Conversion{
 class C4to2 implements Conversion{
 
     @Override
-    public FiniteDescription convert(FiniteDescription a) {
-        A4 a4 = (A4) a;
-        return new A2(a4.s.length() + 100*a4.a);
+    public FiniteDescription convert(FiniteDescription a){
+        return convert((A4) a);
+    }
+    
+    public A2 convert(A4 a) {
+        return new A2(a.s.length() + 100*a.a);
     }
 
     @Override

@@ -1,14 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package rocnikovyprojekt;
+package conversions;
 
-/**
- *
- * @author Dodo
- */
+import rocnikovyprojekt.FiniteDescription;
+
 public interface Conversion {
     public FiniteDescription convert(FiniteDescription a);
     public Class<? extends FiniteDescription> getFrom();
@@ -16,6 +9,42 @@ public interface Conversion {
 }
 
 /*Zopar tried na ilustraciu fungovania:*/
+
+class A1 implements FiniteDescription{
+    int a;
+    int b;
+    
+    public A1(int a_, int b_){
+        a = a_;
+        b = b_;
+    }
+}
+
+class A2 implements FiniteDescription{
+    int x;
+    
+    public A2(int x_){
+        x = x_;
+    }
+}
+
+class A3 implements FiniteDescription{
+    String s;
+    
+    public A3(String s_){
+        s = s_;
+    }
+}
+
+class A4 implements FiniteDescription{
+    String s;
+    int a;
+    
+    public A4(String s_, int a_){
+        s = s_;
+        a = a_;
+    }
+}
 
 class C1to2 implements Conversion{
 

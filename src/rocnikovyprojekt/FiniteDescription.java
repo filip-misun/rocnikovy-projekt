@@ -10,42 +10,5 @@ package rocnikovyprojekt;
  * @author Dodo
  */
 public interface FiniteDescription {
-}
-
-/*Zopar tried na ilustraciu fungovania:*/
-
-class A1 implements FiniteDescription{
-    int a;
-    int b;
-    
-    public A1(int a_, int b_){
-        a = a_;
-        b = b_;
-    }
-}
-
-class A2 implements FiniteDescription{
-    int x;
-    
-    public A2(int x_){
-        x = x_;
-    }
-}
-
-class A3 implements FiniteDescription{
-    String s;
-    
-    public A3(String s_){
-        s = s_;
-    }
-}
-
-class A4 implements FiniteDescription{
-    String s;
-    int a;
-    
-    public A4(String s_, int a_){
-        s = s_;
-        a = a_;
-    }
+	
 }

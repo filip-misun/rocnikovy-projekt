@@ -10,13 +10,13 @@ import java.util.Set;
 
 import rocnikovyprojekt.FiniteAutomaton.Configuration;
 
-public class NondeterministicFiniteAutomaton implements FiniteDescription {
+public class NFA implements FiniteDescription {
 	
 	private TransitionFunction transitionFunction;
 	private Object startState;
 	private Set<Object> finalStates;
 	
-	public NondeterministicFiniteAutomaton(TransitionFunction transitionFunction,
+	public NFA(TransitionFunction transitionFunction,
 			Object startState, Set<Object> finalStates) {
 		this.transitionFunction = transitionFunction;
 		this.startState = startState;
@@ -75,8 +75,8 @@ public class NondeterministicFiniteAutomaton implements FiniteDescription {
 		}
 		
                 public class Input {
-                    Object state;
-                    Object symbol;
+                    public Object state;
+                    public Object symbol;
                     
                     public Input(Object state, Object symbol){
                         this.state = state;

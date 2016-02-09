@@ -3,18 +3,19 @@ package rocnikovyprojekt;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import rocnikovyprojekt.FiniteAutomaton.Configuration;
 
-public class DeterministicFiniteAutomaton implements FiniteDescription{
+public class DFA implements FiniteDescription{
 	
 	private TransitionFunction transitionFunction;
 	private Object startState;
 	private Set<Object> finalStates;
 	private ArrayList<Configuration> lastComputation;
 	
-	public DeterministicFiniteAutomaton(TransitionFunction transitionFunction,
+	public DFA(TransitionFunction transitionFunction,
 			Object startState, Set<Object> finalStates) {
 		this.transitionFunction = transitionFunction;
 		this.startState = startState;
@@ -67,10 +68,14 @@ public class DeterministicFiniteAutomaton implements FiniteDescription{
 		public boolean containsKey(Object state, Object symbol) {
 			return map.containsKey(new Input(state, symbol));
 		}
+                
+                public Set<Map.Entry<Input, Object>> entrySet(){
+                    return map.entrySet();
+                }
 		
                 public class Input {
-                    Object state;
-                    Object symbol;
+                    public Object state;
+                    public Object symbol;
                     
                     public Input(Object state_, Object symbol_){
                         state = state_;

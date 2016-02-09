@@ -20,7 +20,7 @@ public class Conversions {
 					Thread.currentThread().getContextClassLoader());
 			/* Naplnenie list-u triedami implementujucimi Conversion */
 			for (ClassPath.ClassInfo classInfo : classpath.getTopLevelClassesRecursive(
-					"rocnikovyprojekt")) {
+					"conversions")) {
 				@SuppressWarnings("unchecked")
 				Class<? extends Conversion> c = (Class<? extends Conversion>)
 						Class.forName(classInfo.getName());

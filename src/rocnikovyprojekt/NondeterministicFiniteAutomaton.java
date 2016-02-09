@@ -54,14 +54,14 @@ public class NondeterministicFiniteAutomaton implements FiniteDescription {
 	
 	public static class TransitionFunction {
 		
-		private HashMap<List<Object>, Set<Object>> map = new HashMap<>();
+		private HashMap<Input, Set<Object>> map = new HashMap<>();
 		
 		public void put(Object state, Object symbol, Set<Object> newStates) {
-			map.put(createList(state, symbol), newStates);
+			map.put(new Input(state, symbol), newStates);
 		}
 		
 		Set<Object> get(Object state, Object symbol) {
-			Set<Object> val = map.get(createList(state, symbol));
+			Set<Object> val = map.get(new Input(state, symbol));
 			if (val == null) {
 				/* defaultna funkcna hodnota je prazdna mnozina */
 				return new HashSet<Object>();
@@ -71,15 +71,18 @@ public class NondeterministicFiniteAutomaton implements FiniteDescription {
 		}
 		
 		public boolean containsKey(Object state, Object symbol) {
-			return map.containsKey(createList(state, symbol));
+			return map.containsKey(new Input(state, symbol));
 		}
 		
-		private List<Object> createList(Object state, Object symbol) {
-			ArrayList<Object> l = new ArrayList<Object>(2);
-			l.add(state);
-			l.add(symbol);
-			return l;
-		}
+                public class Input {
+                    Object state;
+                    Object symbol;
+                    
+                    public Input(Object state, Object symbol){
+                        this.state = state;
+                        this.symbol = symbol;
+                    }
+                }
 	}
 
 }

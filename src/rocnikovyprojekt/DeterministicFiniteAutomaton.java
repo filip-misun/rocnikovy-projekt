@@ -54,27 +54,29 @@ public class DeterministicFiniteAutomaton implements FiniteDescription{
 	
 	public static class TransitionFunction {
 		
-		private HashMap<List<Object>, Object> map = new HashMap<>();
+		private HashMap<Input, Object> map = new HashMap<>();
 		
 		public void put(Object state, Object symbol, Object newState) {
-			map.put(createList(state, symbol), newState);
+			map.put(new Input(state, symbol), newState);
 		}
 		
 		Object get(Object state, Object symbol) {
-			return map.get(createList(state, symbol));
+			return map.get(new Input(state, symbol));
 		}
 		
 		public boolean containsKey(Object state, Object symbol) {
-			return map.containsKey(createList(state, symbol));
+			return map.containsKey(new Input(state, symbol));
 		}
 		
-		private List<Object> createList(Object state, Object symbol) {
-			ArrayList<Object> l = new ArrayList<Object>(2);
-			l.add(state);
-			l.add(symbol);
-			return l;
-		}
-		
+                public class Input {
+                    Object state;
+                    Object symbol;
+                    
+                    public Input(Object state_, Object symbol_){
+                        state = state_;
+                        symbol = symbol_;
+                    }
+                }
 	}
 	
 }

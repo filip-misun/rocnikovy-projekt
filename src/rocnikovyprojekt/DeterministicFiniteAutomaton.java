@@ -7,7 +7,7 @@ import java.util.Set;
 
 import rocnikovyprojekt.FiniteAutomaton.Configuration;
 
-public class DeterministicFiniteAutomaton {
+public class DeterministicFiniteAutomaton implements FiniteDescription{
 	
 	private TransitionFunction transitionFunction;
 	private Object startState;
@@ -39,6 +39,18 @@ public class DeterministicFiniteAutomaton {
 	public List<Configuration> getLastComputation() {
 		return lastComputation;
 	}
+        
+        public Object getStartState(){
+            return startState;
+        }
+        
+        public Set<Object> getFinalStates(){
+            return finalStates;
+        } 
+        
+        public TransitionFunction getDelta(){
+            return transitionFunction;
+        }
 	
 	public static class TransitionFunction {
 		

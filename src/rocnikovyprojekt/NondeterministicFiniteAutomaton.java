@@ -10,7 +10,7 @@ import java.util.Set;
 
 import rocnikovyprojekt.FiniteAutomaton.Configuration;
 
-public class NondeterministicFiniteAutomaton {
+public class NondeterministicFiniteAutomaton implements FiniteDescription {
 	
 	private TransitionFunction transitionFunction;
 	private Object startState;

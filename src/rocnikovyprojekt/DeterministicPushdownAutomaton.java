@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class DeterministicPushdownAutomaton {
+public class DeterministicPushdownAutomaton implements FiniteDescription {
 	
 	private TransitionFunction transitionFunction;
 	private Object startState;

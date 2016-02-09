@@ -6,6 +6,7 @@ import java.util.HashSet;
 public class Main {
 
 	public static void main(String[] args) {
+            /*
 		DeterministicFiniteAutomaton.TransitionFunction f1 = 
 				new DeterministicFiniteAutomaton.TransitionFunction();
 		f1.put(0, 'h', 1);
@@ -89,7 +90,7 @@ public class Main {
 			System.out.println("M3 akceptuje");
 		} else {
 			System.out.println("M3 neakceptuje");
-		}
+		}*/
 
 	}
 }

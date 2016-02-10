@@ -9,8 +9,16 @@ import java.util.List;
 
 public class Conversions {
 	
-	private static ConversionGraph graph;
-	private static ConversionWeightEvaluator weightEval;
+    private static ConversionGraph graph;
+    private static ConversionWeightEvaluator weightEval
+            = new ConversionWeightEvaluator() {
+
+                @Override
+                public int getWeight(Conversion conversion) {
+                    return 1;
+                }
+
+            };
 
 	static {
 		System.out.println("Initializing Conversions...");

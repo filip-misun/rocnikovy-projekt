@@ -9,7 +9,7 @@ public interface Conversion {
 }
 
 /*Zopar tried na ilustraciu fungovania:*/
-
+/*
 class A1 implements FiniteDescription{
     int a;
     int b;
@@ -164,4 +164,4 @@ class C4to2 implements Conversion{
         return A2.class;
     }
 
-}
+}*/

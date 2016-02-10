@@ -15,6 +15,12 @@ public class Word {
 	public Word(List<Object> symbols) {
 		this.symbols = symbols;
 	}
+        
+        public Word(String s){
+            for(int i = 0; i < s.length(); i++){
+                symbols.add(new Character(s.charAt(i)));
+            }
+        }
 	
 	public Object symbolAt(int index) {
 		return symbols.get(index);

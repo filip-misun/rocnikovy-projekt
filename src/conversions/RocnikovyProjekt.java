@@ -15,13 +15,13 @@ public class RocnikovyProjekt {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        A4 a = new A4("hello",47);
+        /*A4 a = new A4("hello",47);
         Conversions c = new Conversions();
         c.print();
         A1 b = (A1) Conversions.convert(a, A1.class);
         A4 d = (A4) Conversions.convert(a, A4.class);
         System.out.println(b.a + " " + b.b);
-        System.out.println(d.s + " " + d.a);
+        System.out.println(d.s + " " + d.a);*/
     }
     
 }

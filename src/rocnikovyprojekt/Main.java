@@ -1,11 +1,37 @@
 package rocnikovyprojekt;
 
+import conversions.Conversions;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class Main {
 
 	public static void main(String[] args) {
+            DFA.TransitionFunction d1 = new DFA.TransitionFunction();
+            d1.put(0, 'a', 1);
+            d1.put(1, 'a', 2);
+            d1.put(2, 'a', 0);
+            d1.put(0, 'b', 0);
+            d1.put(1, 'b', 1);
+            d1.put(2, 'b', 2);
+            DFA a1 = new DFA(d1,0,Collections.singleton(0));
+            System.out.println(a1.accepts(new Word("abbaba")));
+            System.out.println(a1.accepts(new Word("ababbaaba")));
+            System.out.println(a1.accepts(new Word("")));
+            System.out.println(a1.accepts(new Word("aaa")));
+            Conversions conv = new Conversions();
+            NFA a2 = (NFA) Conversions.convert(a1, NFA.class);
+            Set<Object> set = a2.getDelta().get(0, 'a');
+            for(Object s : set){
+                System.out.println(s);
+            }
+            System.out.println(a2.accepts(new Word("abbaba")));
+            System.out.println(a2.accepts(new Word("ababbaaba")));
+            System.out.println(a2.accepts(new Word("")));
+            System.out.println(a2.accepts(new Word("aaa")));
             /*
 		DeterministicFiniteAutomaton.TransitionFunction f1 = 
 				new DeterministicFiniteAutomaton.TransitionFunction();

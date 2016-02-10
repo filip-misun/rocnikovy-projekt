@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Set;
 import rocnikovyprojekt.FiniteDescription;
 import rocnikovyprojekt.DFA;
+import rocnikovyprojekt.FAInput;
 import rocnikovyprojekt.NFA;
 
 /**
@@ -24,7 +25,7 @@ public class DFAtoNFA implements Conversion{
         DFA.TransitionFunction delta = afrom.getDelta();
         NFA.TransitionFunction newDelta =
                 new NFA.TransitionFunction();
-        for(Map.Entry<DFA.TransitionFunction.Input,Object> entry : afrom.getDelta().entrySet()){
+        for(Map.Entry<FAInput,Object> entry : afrom.getDelta().entrySet()){
             Set<Object> output = new HashSet<Object>();
             output.add(entry.getValue());
             newDelta.put(entry.getKey().state, entry.getKey().symbol, output);

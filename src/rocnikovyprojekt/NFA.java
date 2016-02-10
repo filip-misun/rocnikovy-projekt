@@ -51,17 +51,29 @@ public class NFA implements FiniteDescription {
 		}
 		return false;
 	}
+        
+        public TransitionFunction getDelta(){
+            return transitionFunction;
+        }
+        
+        public Object getStartState(){
+            return startState;
+        }
+        
+        public Set<Object> getFinalStates(){
+            return finalStates;
+        }
 	
 	public static class TransitionFunction {
 		
-		private HashMap<Input, Set<Object>> map = new HashMap<>();
+		private HashMap<FAInput, Set<Object>> map = new HashMap<>();
 		
 		public void put(Object state, Object symbol, Set<Object> newStates) {
-			map.put(new Input(state, symbol), newStates);
+			map.put(new FAInput(state, symbol), newStates);
 		}
 		
 		Set<Object> get(Object state, Object symbol) {
-			Set<Object> val = map.get(new Input(state, symbol));
+			Set<Object> val = map.get(new FAInput(state, symbol));
 			if (val == null) {
 				/* defaultna funkcna hodnota je prazdna mnozina */
 				return new HashSet<Object>();
@@ -71,18 +83,8 @@ public class NFA implements FiniteDescription {
 		}
 		
 		public boolean containsKey(Object state, Object symbol) {
-			return map.containsKey(new Input(state, symbol));
+			return map.containsKey(new FAInput(state, symbol));
 		}
-		
-                public class Input {
-                    public Object state;
-                    public Object symbol;
-                    
-                    public Input(Object state, Object symbol){
-                        this.state = state;
-                        this.symbol = symbol;
-                    }
-                }
 	}
 
 }

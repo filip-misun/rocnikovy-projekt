@@ -55,32 +55,22 @@ public class DFA implements FiniteDescription{
 	
 	public static class TransitionFunction {
 		
-		private HashMap<Input, Object> map = new HashMap<>();
+		private HashMap<FAInput, Object> map = new HashMap<>();
 		
 		public void put(Object state, Object symbol, Object newState) {
-			map.put(new Input(state, symbol), newState);
+			map.put(new FAInput(state, symbol), newState);
 		}
 		
 		Object get(Object state, Object symbol) {
-			return map.get(new Input(state, symbol));
+			return map.get(new FAInput(state, symbol));
 		}
 		
 		public boolean containsKey(Object state, Object symbol) {
-			return map.containsKey(new Input(state, symbol));
+			return map.containsKey(new FAInput(state, symbol));
 		}
                 
-                public Set<Map.Entry<Input, Object>> entrySet(){
+                public Set<Map.Entry<FAInput, Object>> entrySet(){
                     return map.entrySet();
-                }
-		
-                public class Input {
-                    public Object state;
-                    public Object symbol;
-                    
-                    public Input(Object state_, Object symbol_){
-                        state = state_;
-                        symbol = symbol_;
-                    }
                 }
 	}
 	

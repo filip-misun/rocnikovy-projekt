@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
@@ -69,6 +70,14 @@ public class NFA implements FiniteDescription {
         public Set<Object> getFinalStates(){
             return finalStates;
         }
+        
+        public Set<Object> getAlphabet(){
+            return transitionFunction.getAlphabet();
+        }
+        
+        public Set<Object> getStates(){
+            return transitionFunction.getStates();
+        }
 	
 	public static class TransitionFunction {
 		
@@ -78,7 +87,7 @@ public class NFA implements FiniteDescription {
 			map.put(new FAInput(state, symbol), newStates);
 		}
 		
-		Set<Object> get(Object state, Object symbol) {
+		public Set<Object> get(Object state, Object symbol) {
 			Set<Object> val = map.get(new FAInput(state, symbol));
 			if (val == null) {
 				/* defaultna funkcna hodnota je prazdna mnozina */
@@ -91,6 +100,26 @@ public class NFA implements FiniteDescription {
 		public boolean containsKey(Object state, Object symbol) {
 			return map.containsKey(new FAInput(state, symbol));
 		}
+                
+                public Set<Map.Entry<FAInput, Set<Object>>> entrySet(){
+                    return map.entrySet();
+                }
+                
+                public Set<Object> getAlphabet(){
+                    Set<Object> alphabet = new HashSet<>();
+                    for(Map.Entry<FAInput, Set<Object>> entry : map.entrySet()){
+                        alphabet.add(entry.getKey().symbol);
+                    }
+                    return alphabet;
+                }
+                
+                public Set<Object> getStates(){
+                    Set<Object> states = new HashSet<>();
+                    for(Map.Entry<FAInput, Set<Object>> entry : map.entrySet()){
+                        states.add(entry.getKey().state);
+                    }
+                    return states;
+                }
 	}
 
 }

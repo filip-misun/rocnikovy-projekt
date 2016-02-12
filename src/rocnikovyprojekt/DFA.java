@@ -2,6 +2,7 @@ package rocnikovyprojekt;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -52,6 +53,14 @@ public class DFA implements FiniteDescription{
         public TransitionFunction getDelta(){
             return transitionFunction;
         }
+        
+        public Set<Object> getAlphabet(){
+            return transitionFunction.getAlphabet();
+        }
+        
+        public Set<Object> getStates(){
+            return transitionFunction.getStates();
+        }
 	
 	public static class TransitionFunction {
 		
@@ -71,6 +80,22 @@ public class DFA implements FiniteDescription{
                 
                 public Set<Map.Entry<FAInput, Object>> entrySet(){
                     return map.entrySet();
+                }
+                
+                public Set<Object> getAlphabet(){
+                    Set<Object> alphabet = new HashSet<>();
+                    for(Map.Entry<FAInput, Object> entry : map.entrySet()){
+                        alphabet.add(entry.getKey().symbol);
+                    }
+                    return alphabet;
+                }
+                
+                public Set<Object> getStates(){
+                    Set<Object> states = new HashSet<>();
+                    for(Map.Entry<FAInput, Object> entry : map.entrySet()){
+                        states.add(entry.getKey().state);
+                    }
+                    return states;
                 }
 	}
 	

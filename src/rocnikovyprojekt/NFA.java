@@ -1,6 +1,7 @@
 package rocnikovyprojekt;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -12,9 +13,9 @@ import rocnikovyprojekt.FiniteAutomaton.Configuration;
 
 public class NFA implements FiniteDescription {
 	
-	private TransitionFunction transitionFunction;
-	private Object startState;
-	private Set<Object> finalStates;
+	protected TransitionFunction transitionFunction;
+	protected Object startState;
+	protected Set<Object> finalStates;
 	
 	public NFA(TransitionFunction transitionFunction,
 			Object startState, Set<Object> finalStates) {
@@ -38,19 +39,24 @@ public class NFA implements FiniteDescription {
 				return true;
 			}
 			visited.add(conf);
-			
-			if (conf.getPosition() < word.length()) {
-				for (Object state : transitionFunction.get(conf.getState(),
-						word.symbolAt(conf.getPosition()))) {
-					queue.add(new Configuration(state, conf.getPosition()+1));
-				}
-			}
-			for (Object state : transitionFunction.get(conf.getState(), Word.EMPTYWORD)) {
-				queue.add(new Configuration(state, conf.getPosition()));
-			}
+                        queue.addAll(nextConfigurations(conf,word));
+//			for (Object state : transitionFunction.get(conf.getState(), Word.EMPTYWORD)) {
+//				queue.add(new Configuration(state, conf.getPosition()));
+//			}
 		}
 		return false;
 	}
+        
+        public Collection<Configuration> nextConfigurations(Configuration conf, Word word){
+            ArrayList<Configuration> newConfigurations = new ArrayList<>();
+            if (conf.getPosition() < word.length()) {
+                for (Object state : transitionFunction.get(conf.getState(),
+                        word.symbolAt(conf.getPosition()))) {
+                    newConfigurations.add(new Configuration(state, conf.getPosition() + 1));
+                }
+            }
+            return newConfigurations;
+        }
         
         public TransitionFunction getDelta(){
             return transitionFunction;

@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Word {
 	
-	final static Object EMPTYWORD = new Object();
+	public final static Object EMPTYWORD = new Object();
 	private List<Object> symbols = new ArrayList<>();
 	
 	public Word() {

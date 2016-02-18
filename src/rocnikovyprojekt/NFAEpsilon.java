@@ -1,23 +1,23 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package rocnikovyprojekt;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Scanner;
 import java.util.Set;
 import rocnikovyprojekt.FiniteAutomaton.Configuration;
 
 /**
  *
- * @author Dodo
+ * @author Jozef Rajník
  */
 public class NFAEpsilon extends NFA{
 
     public NFAEpsilon(TransitionFunction transitionFunction, Object startState, Set<Object> finalStates) {
         super(transitionFunction, startState, finalStates);
+    }
+    
+    public NFAEpsilon(Scanner s){
+        super(s);
     }
     
     @Override
@@ -29,5 +29,4 @@ public class NFAEpsilon extends NFA{
         newConfigurations.addAll(super.nextConfigurations(conf, word));
         return newConfigurations;
     }
-    
 }

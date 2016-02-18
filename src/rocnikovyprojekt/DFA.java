@@ -1,10 +1,14 @@
 package rocnikovyprojekt;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Set;
 
 import rocnikovyprojekt.FiniteAutomaton.Configuration;
@@ -22,6 +26,14 @@ public class DFA implements FiniteDescription{
 		this.startState = startState;
 		this.finalStates = finalStates;
 	}
+        
+        public DFA(Scanner s){
+            startState = s.nextLine();
+            finalStates = new HashSet<>();
+            for(String str : s.nextLine().split(" ")){
+                finalStates.add(str);
+            }
+        }
 	
 	public boolean accepts(Word word) {
 		Object currentState = startState;
@@ -61,10 +73,32 @@ public class DFA implements FiniteDescription{
         public Set<Object> getStates(){
             return transitionFunction.getStates();
         }
+        
+        public void print(PrintStream out){
+            out.println(startState);
+            boolean first = true;
+            for(Object state : finalStates){
+                if(!first){
+                    out.print(" ");
+                }
+                out.print(state);
+                first = false;
+            }
+            transitionFunction.print(out);
+        }
 	
 	public static class TransitionFunction {
 		
 		private HashMap<FAInput, Object> map = new HashMap<>();
+                
+                public TransitionFunction(){}
+                
+                public TransitionFunction(Scanner s){
+                    while(s.hasNext()){
+                        String[] line = s.nextLine().split(" ");
+                        put(line[0], line[1], line[2]);
+                    }
+                }
 		
 		public void put(Object state, Object symbol, Object newState) {
 			map.put(new FAInput(state, symbol), newState);
@@ -96,6 +130,15 @@ public class DFA implements FiniteDescription{
                         states.add(entry.getKey().state);
                     }
                     return states;
+                }
+                
+                public void print(PrintStream out){
+                    for(Map.Entry<FAInput, Object> entry : map.entrySet()){
+                        out.println(entry.getKey().state + " " +
+                                entry.getKey().symbol + " " +
+                                entry.getValue());
+                    }
+                    out.flush();
                 }
 	}
 	

@@ -1,5 +1,6 @@
 package rocnikovyprojekt;
 
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -8,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import java.util.Scanner;
 import java.util.Set;
 
 import rocnikovyprojekt.FiniteAutomaton.Configuration;
@@ -25,6 +27,15 @@ public class NFA implements FiniteDescription {
 		this.finalStates = finalStates;
 	}
 	
+        public NFA(Scanner s){
+            startState = s.nextLine();
+            finalStates = new HashSet<>();
+            for(String str : s.nextLine().split(" ")){
+                finalStates.add(str);
+            }
+            transitionFunction = new TransitionFunction(s);
+        }
+        
 	public boolean accepts(Word word) {
 		Set<Configuration> visited = new HashSet<>();
 		Queue<Configuration> queue = new LinkedList<>();
@@ -78,11 +89,47 @@ public class NFA implements FiniteDescription {
         public Set<Object> getStates(){
             return transitionFunction.getStates();
         }
+        
+        public void print(PrintStream out){
+            out.println(startState);
+            boolean first = true;
+            for(Object state : finalStates){
+                if(!first){
+                    out.print(" ");
+                }
+                out.print(state);
+                first = false;
+            }
+            transitionFunction.print(out);
+        }
 	
 	public static class TransitionFunction {
 		
 		private HashMap<FAInput, Set<Object>> map = new HashMap<>();
 		
+                public TransitionFunction() {}
+                
+                public TransitionFunction(Scanner s){
+                    while(s.hasNext()){
+                        String[] line = s.nextLine().split(" ");
+                        Object character = line[1];
+                        if(line[1].toLowerCase().equals("epsilon")){
+                            character = Word.EMPTYWORD;
+                        }
+                        HashSet<Object> set = new HashSet<>();
+                        if(line[2].charAt(0) == '[' &&
+                                line[2].charAt(line[2].length() - 1) == ']'){
+                            String arg2 = new String(line[2].toCharArray(), 1, line[2].length() - 2);
+                            for(String state : arg2.split(", ")){
+                                set.add(state);
+                            }
+                        } else {
+                            set.add(line[2]);
+                        }
+                        put(line[0], character, set);
+                    }
+                }
+                
 		public void put(Object state, Object symbol, Set<Object> newStates) {
 			map.put(new FAInput(state, symbol), newStates);
 		}
@@ -119,6 +166,16 @@ public class NFA implements FiniteDescription {
                         states.add(entry.getKey().state);
                     }
                     return states;
+                }
+                
+                public void print(PrintStream out){
+                    for(Map.Entry<FAInput, Set<Object>> entry : map.entrySet()){
+                        out.println(
+                                entry.getKey().state + " " +
+                                entry.getKey().symbol + " " +
+                                entry.getValue());
+                    }
+                    out.flush();
                 }
 	}
 

@@ -74,6 +74,14 @@ public class DFA implements FiniteDescription{
             return transitionFunction.getStates();
         }
         
+        /**
+         * Prints text representation of this DFA to specified PrintStream.
+         * It prints this DFA as following:
+         * start state
+         * space-separeted final states
+         * lines with transition funcion (see TransitionFunction.print)
+         * @param out PrintStream which this shoud be printed to.
+         */
         public void print(PrintStream out){
             out.println(startState);
             boolean first = true;
@@ -132,6 +140,13 @@ public class DFA implements FiniteDescription{
                     return states;
                 }
                 
+                /**
+                 * Prints string representation of transition function to
+                 * specified PrintStream.
+                 * The printed string consists of several lines. Each line contains
+                 * input state, read character and output state.
+                 * @param out PrintStream which this shoud be printed to.
+                 */
                 public void print(PrintStream out){
                     for(Map.Entry<FAInput, Object> entry : map.entrySet()){
                         out.println(entry.getKey().state + " " +

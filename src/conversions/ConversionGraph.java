@@ -152,7 +152,6 @@ public class ConversionGraph {
 			Map<Class<? extends FiniteDescription>, Conversion> lastEdge,
 			ConversionWeightEvaluator weightEval, boolean findPathsInto) {
 		
-		print();
                 Collection<Vertex> vertices = map.values();
 		for (Vertex v : vertices) {
 			distance.put(v.getData(), Integer.MAX_VALUE);

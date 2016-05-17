@@ -9,8 +9,16 @@ import java.util.List;
 
 public class Conversions {
 	
-	private static ConversionGraph graph;
-	private static ConversionWeightEvaluator weightEval;
+    private static ConversionGraph graph;
+    private static ConversionWeightEvaluator weightEval
+            = new ConversionWeightEvaluator() {
+
+                @Override
+                public int getWeight(Conversion conversion) {
+                    return 1;
+                }
+
+            };
 
 	static {
 		System.out.println("Initializing Conversions...");
@@ -20,7 +28,7 @@ public class Conversions {
 					Thread.currentThread().getContextClassLoader());
 			/* Naplnenie list-u triedami implementujucimi Conversion */
 			for (ClassPath.ClassInfo classInfo : classpath.getTopLevelClassesRecursive(
-					"rocnikovyprojekt")) {
+					"conversions")) {
 				@SuppressWarnings("unchecked")
 				Class<? extends Conversion> c = (Class<? extends Conversion>)
 						Class.forName(classInfo.getName());

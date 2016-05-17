@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class DeterministicPushdownAutomaton {
+public class DeterministicPushdownAutomaton implements FiniteDescription {
 	
 	private TransitionFunction transitionFunction;
 	private Object startState;
@@ -35,7 +35,7 @@ public class DeterministicPushdownAutomaton {
 					currentStackSymbol)) {
 				return false;
 			}
-			TransitionFunction.Value val = transitionFunction.get(currentState,
+			TransitionFunction.Output val = transitionFunction.get(currentState,
 					word.symbolAt(i), currentStackSymbol);
 			currentState = val.newState;
 			stack.addAll(val.pushToStack);
@@ -45,46 +45,48 @@ public class DeterministicPushdownAutomaton {
 	
 	public static class TransitionFunction {
 		
-		private HashMap<List<Object>, Value> map = new HashMap<>();
+		private HashMap<Input, Output> map = new HashMap<>();
 		
 		public void put(Object state, Object tapeSymbol, Object stackSymbol,
 				Object newState, List<Object> pushToStack) {
-			List<Object> key = createKeyList(state, tapeSymbol, stackSymbol);
-			Value value = new Value(newState, pushToStack);
-			map.put(key, value);
+			map.put(new Input(state, tapeSymbol, stackSymbol),
+                                new Output(newState, pushToStack));
 		}
 		
-		public Value get(Object state, Object tapeSymbol, Object stackSymbol) {
-			return map.get(createKeyList(state, tapeSymbol, stackSymbol));
+		public Output get(Object state, Object tapeSymbol, Object stackSymbol) {
+			return map.get(new Input(state, tapeSymbol, stackSymbol));
 		}
 		
 		public boolean containsKey(Object state, Object tapeSymbol, Object stackSymbol) {
-			return map.containsKey(createKeyList(state, tapeSymbol, stackSymbol));
+			return map.containsKey(new Input(state, tapeSymbol, stackSymbol));
 		}
 		
-		private List<Object> createKeyList(Object state, Object tapeSymbol, 
-				Object stackSymbol) {
-			ArrayList<Object> l = new ArrayList<>();
-			l.add(state);
-			l.add(tapeSymbol);
-			l.add(stackSymbol);
-			return l;
-		}
-		
-		public static class Value {
+                public class Input {
+                    Object state;
+                    Object tapeSymbol;
+                    Object stackSymbol;
+                    
+                    public Input(Object state, Object tapeSymbol, Object stackSymbol){
+                        this.state = state;
+                        this.tapeSymbol = tapeSymbol;
+                        this.stackSymbol = stackSymbol;
+                    }
+                }
+                
+		public static class Output {
 			
 			public Object newState;
 			public List<Object> pushToStack;
 			
-			public Value(Object newState, List<Object> pushToStack) {
+			public Output(Object newState, List<Object> pushToStack) {
 				this.newState = newState;
 				this.pushToStack = pushToStack;
 			}
 			
 			@Override
 			public boolean equals(Object obj) {
-				if (!(obj instanceof Value)) return false;
-				Value val = (Value) obj;
+				if (!(obj instanceof Output)) return false;
+				Output val = (Output) obj;
 				return this.newState.equals(val.newState) &&
 						this.pushToStack.equals(val.pushToStack);
 			}

@@ -83,7 +83,7 @@ public class ConversionRequest {
 	}
 
 	public boolean hasOutputClass() {
-		return outputClass == null;
+		return outputClass != null;
 	}
 
 }

@@ -45,6 +45,9 @@ public class ConversionPlan {
 
 	public ConversionPlan(int numberOfInputs) {
 		inputConversions = new ArrayList<>(numberOfInputs);
+                for(int i = 0; i < numberOfInputs; i++){
+                    inputConversions.add(new ArrayList<>());
+                }
 	}
 
 	public void setInputConversions(int index, List<Conversion> conversions) {

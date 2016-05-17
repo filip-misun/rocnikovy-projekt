@@ -1,6 +1,6 @@
 package rocnikovyprojekt;
 
-public class FiniteAutomaton {
+public class FiniteAutomaton implements FiniteDescription {
 	
 	public static class Configuration {
 		private Object state;

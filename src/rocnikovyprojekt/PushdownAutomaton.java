@@ -4,7 +4,7 @@ import java.util.List;
 
 public class PushdownAutomaton {
 	
-	public static class Configuration {
+	public static class Configuration implements FiniteDescription {
 		private Object state;
 		private List<Object> stack;
 		private int position;

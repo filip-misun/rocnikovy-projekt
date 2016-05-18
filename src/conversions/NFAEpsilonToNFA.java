@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import rocnikovyprojekt.FAInput;
@@ -53,7 +54,7 @@ public class NFAEpsilonToNFA implements Conversion{
            we add moves from q to each state of epsilon tail of p, where
            p is a state which automaton afrom moves on a to. */
         for(Map.Entry<FAInput, Set<Object>> entry : afrom.getDelta().entrySet()){
-            if(afrom.getFinalStates().contains(entry.getKey().state)){
+            if(afrom.getStartState().equals(entry.getKey().state)){
                 continue;
             }
             HashSet<Object> result = new HashSet<>();
@@ -84,6 +85,13 @@ public class NFAEpsilonToNFA implements Conversion{
         for(Object state : tails.get(afrom.getStartState())){
             if(afrom.getFinalStates().contains(state)){
                 finalStates.add(afrom.getStartState());
+            }
+        }
+        /* At last, we remove epsilon-moves */
+        for(Iterator<Map.Entry<FAInput, Set<Object>>> it = delta.entrySet().iterator();
+                it.hasNext();){
+            if(it.next().getKey().symbol.equals(Word.EMPTYWORD)){
+                it.remove();
             }
         }
         return new NFA(delta, afrom.getStartState(), finalStates);

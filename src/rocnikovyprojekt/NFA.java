@@ -100,6 +100,7 @@ public class NFA implements FiniteDescription {
                 out.print(state);
                 first = false;
             }
+            out.println();
             transitionFunction.print(out);
         }
 	

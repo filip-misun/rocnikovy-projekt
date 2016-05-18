@@ -16,6 +16,7 @@ public class Main {
 
 	public static void main(String[] args) throws FileNotFoundException {
             NFAEpsilon a1 = new NFAEpsilon(new Scanner(new File("a1.txt")));
+            a1.print(System.out);
             System.out.println(a1.accepts(new Word("aaabbb")));
             System.out.println(a1.accepts(Word.EMPTYWORD));
             System.out.println(a1.accepts(new Word("aabbbbb")));
@@ -34,5 +35,6 @@ public class Main {
             System.out.println(a3.accepts(new Word("aabbbbb")));
             System.out.println(a3.accepts(new Word("baba")));
             System.out.println();
+            a3.print(System.out);
 	}
 }

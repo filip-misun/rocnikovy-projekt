@@ -38,4 +38,33 @@ public class Word {
 	public int length() {
 		return symbols.size();
 	}
+        
+        /**
+         * Returns word with replaced character at position index with Word w.
+         * Note that this method does not change this word.
+         * @param index index of character to be replaced
+         * @param w word which the character is replaced with 
+         * @return word with replaced character at position index with Word w
+         */
+        public Word replace(int index, Word w){
+            List<Object> newWord = new ArrayList<>(w.length() + this.length());
+            newWord.addAll(symbols.subList(0, index));
+            newWord.addAll(w.symbols);
+            newWord.addAll(symbols.subList(index + 1, symbols.size()));
+            return new Word(newWord);
+        }
+        
+        @Override
+        public String toString(){
+            StringBuilder str = new StringBuilder();
+            boolean space = false;
+            for(Object s : symbols){
+                if(space){
+                    str.append(" ");
+                }
+                str.append(s);
+                space = true;
+            }
+            return str.toString();
+        }
 }

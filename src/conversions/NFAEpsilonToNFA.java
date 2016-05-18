@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import rocnikovyprojekt.FAInput;
@@ -84,6 +85,13 @@ public class NFAEpsilonToNFA implements Conversion{
         for(Object state : tails.get(afrom.getStartState())){
             if(afrom.getFinalStates().contains(state)){
                 finalStates.add(afrom.getStartState());
+            }
+        }
+        /* At last, we remove epsilon-moves */
+        for(Iterator<Map.Entry<FAInput, Set<Object>>> it = delta.entrySet().iterator();
+                it.hasNext();){
+            if(it.next().getKey().symbol.equals(Word.EMPTYWORD)){
+                it.remove();
             }
         }
         return new NFA(delta, afrom.getStartState(), finalStates);

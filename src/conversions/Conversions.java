@@ -21,7 +21,7 @@ public class Conversions {
             };
 
 	static {
-		System.out.println("Initializing Conversions...");
+		//System.out.println("Initializing Conversions...");
 		ArrayList<Class<? extends Conversion>> list = new ArrayList<>();
 		try {
 			ClassPath classpath = ClassPath.from(
@@ -33,7 +33,7 @@ public class Conversions {
 				Class<? extends Conversion> c = (Class<? extends Conversion>)
 						Class.forName(classInfo.getName());
 				if (Conversion.class.isAssignableFrom(c) && !c.equals(Conversion.class)) {
-					System.out.println("Found " + classInfo.getName());
+					//System.out.println("Found " + classInfo.getName());
 					list.add(c);
 				}
 			}
@@ -46,7 +46,7 @@ public class Conversions {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		System.out.println("Initialization complete.");
+		//System.out.println("Initialization complete.");
 	}
 	
 	/**

@@ -92,6 +92,7 @@ public class DFA implements FiniteDescription{
                 out.print(state);
                 first = false;
             }
+            out.println();
             transitionFunction.print(out);
         }
 	

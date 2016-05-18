@@ -54,7 +54,7 @@ public class NFAEpsilonToNFA implements Conversion{
            we add moves from q to each state of epsilon tail of p, where
            p is a state which automaton afrom moves on a to. */
         for(Map.Entry<FAInput, Set<Object>> entry : afrom.getDelta().entrySet()){
-            if(afrom.getFinalStates().contains(entry.getKey().state)){
+            if(afrom.getStartState().equals(entry.getKey().state)){
                 continue;
             }
             HashSet<Object> result = new HashSet<>();

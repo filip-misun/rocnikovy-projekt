@@ -2,7 +2,7 @@ package rocnikovyprojekt;
 
 import java.util.List;
 
-public class PushdownAutomaton {
+public class PushdownAutomaton implements FiniteDescription {
 	
 	public static class Configuration implements FiniteDescription {
 		private Object state;

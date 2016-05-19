@@ -4,6 +4,7 @@ import java.util.Set;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class DeterministicPushdownAutomaton implements FiniteDescription {
 	
@@ -71,6 +72,22 @@ public class DeterministicPushdownAutomaton implements FiniteDescription {
                         this.tapeSymbol = tapeSymbol;
                         this.stackSymbol = stackSymbol;
                     }
+                    
+                    @Override
+                    public boolean equals(Object o){
+                        if(o instanceof Input){
+                            Input in = (Input) o;
+                            return in.state == this.state && 
+                                    in.stackSymbol == this.stackSymbol &&
+                                    in.tapeSymbol == this.tapeSymbol;
+                        }
+                        else return false;
+                    }
+                    
+                    @Override
+                    public int hashCode(){
+                        return Objects.hash(state, tapeSymbol, stackSymbol);
+                    }
                 }
                 
 		public static class Output {
@@ -90,6 +107,11 @@ public class DeterministicPushdownAutomaton implements FiniteDescription {
 				return this.newState.equals(val.newState) &&
 						this.pushToStack.equals(val.pushToStack);
 			}
+                        
+                        @Override
+                        public int hashCode(){
+                            return Objects.hash(newState, pushToStack);
+                        }
 		}
 	}
 	

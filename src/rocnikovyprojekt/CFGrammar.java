@@ -20,7 +20,7 @@ import java.util.Set;
  *
  * @author Jozef Rajnik
  */
-public class CFGrammar {
+public class CFGrammar implements FiniteDescription{
     Set<Object> nonterminals = null;
     Set<Object> terminals = null;
     Set<Rule> rules;

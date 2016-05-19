@@ -9,6 +9,7 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -53,11 +54,15 @@ public class CFGrammar {
             }
         }
         startSymbol = line;
+        rules = new HashSet<>();
         while(s.hasNext()){
             line = s.nextLine();
             String[] args = line.split(" -> ");
+            if(args.length < 2){
+                continue;
+            }
             Object nonterm = args[0];
-            for(String word : args[1].split(" | ")){
+            for(String word : args[1].split(" \\| ")){
                 rules.add(new Rule(nonterm, new Word(Arrays.asList(word.split(" ")))));
             }
         }

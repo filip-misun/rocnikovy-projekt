@@ -7,13 +7,17 @@ import rocnikovyprojekt.DeterministicPushdownAutomaton.TransitionFunction;
 public class PushdownAutomaton implements FiniteDescription {
 
     private Set<Object> states;
+    private Set<Object> alphabet;
+    private Set<Object> workingAlphabet;
     private Object startState;
     private Object stackStart;
     private TransitionFunction delta;
     
-    public PushdownAutomaton(Set<Object> K, TransitionFunction d, Object q0,
-            Object Z0){
+    public PushdownAutomaton(Set<Object> K, Set<Object> Sigma, Set<Object> Gamma,
+            TransitionFunction d, Object q0, Object Z0){
         states = K;
+        alphabet = Sigma;
+        workingAlphabet = Gamma;
         startState = q0;
         delta = d;
         stackStart = Z0;
@@ -21,6 +25,14 @@ public class PushdownAutomaton implements FiniteDescription {
     
     public Set<Object> getStates(){
         return states;
+    }
+    
+    public Set<Object> getAlphabet(){
+        return alphabet;
+    }
+    
+    public Set<Object> getWorkingAlphabet(){
+        return workingAlphabet;
     }
     
     public Object getStartState(){

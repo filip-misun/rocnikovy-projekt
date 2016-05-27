@@ -62,7 +62,7 @@ public class DeterministicPushdownAutomaton implements FiniteDescription {
 			return map.containsKey(new Input(state, tapeSymbol, stackSymbol));
 		}
 		
-                public class Input {
+                public static class Input {
                     Object state;
                     Object tapeSymbol;
                     Object stackSymbol;

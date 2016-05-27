@@ -5,6 +5,7 @@
  */
 package rocnikovyprojekt;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -13,16 +14,20 @@ import rocnikovyprojekt.DeterministicPushdownAutomaton.TransitionFunction.Output
 
 /**
  *
- * @author Dodo
+ * @author Jozef Rajník
  */
 public class PDAdelta {
 
     private Map<Input, Set<Output>> map;
 
     public void add(Object state, Object tapeSymbol, Object stackSymbol,
-            Object newState, Word pushToStack) {
+            Object newState, List<Object> pushToStack) {
         Input in = new Input(state, tapeSymbol, stackSymbol);
-        
+        Output out = new Output(newState, pushToStack);
+        if(!map.containsKey(in)){
+            map.put(in, new HashSet<>());
+        }
+        map.get(in).add(out);
     }
 
     public Output get(Object state, Object tapeSymbol, Object stackSymbol) {

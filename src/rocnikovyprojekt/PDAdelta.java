@@ -21,7 +21,7 @@ public class PDAdelta {
     private Map<Input, Set<Output>> map;
 
     public void add(Object state, Object tapeSymbol, Object stackSymbol,
-            Object newState, List<Object> pushToStack) {
+            Object newState, Word pushToStack) {
         Input in = new Input(state, tapeSymbol, stackSymbol);
         Output out = new Output(newState, pushToStack);
         if(!map.containsKey(in)){
@@ -30,11 +30,15 @@ public class PDAdelta {
         map.get(in).add(out);
     }
 
-    public Output get(Object state, Object tapeSymbol, Object stackSymbol) {
+    public Set<Output> get(Object state, Object tapeSymbol, Object stackSymbol) {
         return map.get(new Input(state, tapeSymbol, stackSymbol));
     }
 
     public boolean containsKey(Object state, Object tapeSymbol, Object stackSymbol) {
         return map.containsKey(new Input(state, tapeSymbol, stackSymbol));
+    }
+    
+    public Set<Map.Entry<Input, Set<Output>>> entrySet(){
+        return map.entrySet();
     }
 }

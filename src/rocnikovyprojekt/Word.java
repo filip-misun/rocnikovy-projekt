@@ -39,6 +39,14 @@ public class Word {
 		return symbols.size();
 	}
         
+        public boolean isEmpty(){
+            return symbols.isEmpty();
+        }
+        
+        public Object pop(){
+            return symbols.remove(symbols.size() - 1);
+        }
+        
         /**
          * Returns word with replaced character at position index with Word w.
          * Note that this method does not change this word.

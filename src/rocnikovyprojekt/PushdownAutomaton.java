@@ -2,7 +2,6 @@ package rocnikovyprojekt;
 
 import java.util.List;
 import java.util.Set;
-import rocnikovyprojekt.DeterministicPushdownAutomaton.TransitionFunction;
 
 public class PushdownAutomaton implements FiniteDescription {
 
@@ -11,10 +10,10 @@ public class PushdownAutomaton implements FiniteDescription {
     private Set<Object> workingAlphabet;
     private Object startState;
     private Object stackStart;
-    private TransitionFunction delta;
+    private PDAdelta delta;
     
     public PushdownAutomaton(Set<Object> K, Set<Object> Sigma, Set<Object> Gamma,
-            TransitionFunction d, Object q0, Object Z0){
+            PDAdelta d, Object q0, Object Z0){
         states = K;
         alphabet = Sigma;
         workingAlphabet = Gamma;
@@ -43,11 +42,11 @@ public class PushdownAutomaton implements FiniteDescription {
         return stackStart;
     }
     
-    public TransitionFunction getDelta(){
+    public PDAdelta getDelta(){
         return delta;
     }
     
-    public PushdownAutomaton(TransitionFunction d, Object q0,
+    public PushdownAutomaton(PDAdelta d, Object q0,
             Object Z0){
         startState = q0;
         delta = d;

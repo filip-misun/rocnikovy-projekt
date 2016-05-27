@@ -26,6 +26,10 @@ public class Word {
                 symbols.add((new Character(s.charAt(i))).toString());
             }
         }
+        
+        public Word(Word word){
+            this.symbols = new ArrayList<>(word.symbols);
+        }
 	
 	public Object symbolAt(int index) {
 		return symbols.get(index);
@@ -34,10 +38,22 @@ public class Word {
 	public void append(Object symbol) {
 		symbols.add(symbol);
 	}
+        
+        public void append(Word word){
+            symbols.addAll(word.symbols);
+        }
 	
 	public int length() {
 		return symbols.size();
 	}
+        
+        public boolean isEmpty(){
+            return symbols.isEmpty();
+        }
+        
+        public Object pop(){
+            return symbols.remove(symbols.size() - 1);
+        }
         
         /**
          * Returns word with replaced character at position index with Word w.

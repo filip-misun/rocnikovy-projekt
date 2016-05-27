@@ -75,7 +75,7 @@ public class CFGrammar implements FiniteDescription{
         }
     }
     
-    public class Rule {
+    public static class Rule {
         Object nonterminal;
         Word word;
         

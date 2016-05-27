@@ -88,6 +88,11 @@ public class DeterministicPushdownAutomaton implements FiniteDescription {
                     public int hashCode(){
                         return Objects.hash(state, tapeSymbol, stackSymbol);
                     }
+                    
+                    @Override
+                    public String toString(){
+                        return state + "," + tapeSymbol + "," + stackSymbol;
+                    }
                 }
                 
 		public static class Output {
@@ -111,6 +116,11 @@ public class DeterministicPushdownAutomaton implements FiniteDescription {
                         @Override
                         public int hashCode(){
                             return Objects.hash(newState, pushToStack);
+                        }
+                        
+                        @Override
+                        public String toString(){
+                            return "(" + newState + "," + pushToStack + ")";
                         }
 		}
 	}

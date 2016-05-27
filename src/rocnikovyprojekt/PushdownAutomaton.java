@@ -1,5 +1,6 @@
 package rocnikovyprojekt;
 
+import java.io.PrintStream;
 import java.util.List;
 import java.util.Set;
 
@@ -51,6 +52,12 @@ public class PushdownAutomaton implements FiniteDescription {
         startState = q0;
         delta = d;
         stackStart = Z0;
+    }
+    
+    public void print(PrintStream out){
+        out.println(startState + " " + stackStart);
+        out.println();
+        delta.print(out);
     }
     
     public static class Configuration implements FiniteDescription {

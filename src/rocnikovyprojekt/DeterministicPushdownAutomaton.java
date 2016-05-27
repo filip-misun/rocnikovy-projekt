@@ -24,14 +24,14 @@ public class DeterministicPushdownAutomaton implements FiniteDescription {
 	public boolean accepts(Word word) {
 		Object currentState = startState;
 		Object currentStackSymbol;
-		ArrayList<Object> stack = new ArrayList<>();
-		stack.add(startStackSymbol);
+		Word stack = new Word();
+		stack.append(startStackSymbol);
 		
 		for (int i = 0; i < word.length(); i++) {
 			if (stack.isEmpty()) {
 				return false;
 			}
-			currentStackSymbol = stack.remove(stack.size() - 1);
+			currentStackSymbol = stack.pop();
 			if (!transitionFunction.containsKey(currentState, word.symbolAt(i),
 					currentStackSymbol)) {
 				return false;
@@ -39,7 +39,7 @@ public class DeterministicPushdownAutomaton implements FiniteDescription {
 			TransitionFunction.Output val = transitionFunction.get(currentState,
 					word.symbolAt(i), currentStackSymbol);
 			currentState = val.newState;
-			stack.addAll(val.pushToStack);
+			stack.append(val.pushToStack);
 		}
 		return finalStates.contains(currentState);
 	}
@@ -49,7 +49,7 @@ public class DeterministicPushdownAutomaton implements FiniteDescription {
 		private HashMap<Input, Output> map = new HashMap<>();
 		
 		public void put(Object state, Object tapeSymbol, Object stackSymbol,
-				Object newState, List<Object> pushToStack) {
+				Object newState, Word pushToStack) {
 			map.put(new Input(state, tapeSymbol, stackSymbol),
                                 new Output(newState, pushToStack));
 		}
@@ -93,9 +93,9 @@ public class DeterministicPushdownAutomaton implements FiniteDescription {
 		public static class Output {
 			
 			public Object newState;
-			public List<Object> pushToStack;
+			public Word pushToStack;
 			
-			public Output(Object newState, List<Object> pushToStack) {
+			public Output(Object newState, Word pushToStack) {
 				this.newState = newState;
 				this.pushToStack = pushToStack;
 			}

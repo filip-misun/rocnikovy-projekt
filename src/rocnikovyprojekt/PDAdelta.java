@@ -5,6 +5,7 @@
  */
 package rocnikovyprojekt;
 
+import java.io.PrintStream;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -40,5 +41,11 @@ public class PDAdelta {
     
     public Set<Map.Entry<Input, Set<Output>>> entrySet(){
         return map.entrySet();
+    }
+    
+    public void print(PrintStream out){
+        for(Map.Entry<Input, Set<Output>> entry : map.entrySet()){
+            out.println(entry.getKey() + " " + entry.getValue());
+        }
     }
 }

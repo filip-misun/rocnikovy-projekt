@@ -1,0 +1,12 @@
+//Priklad z cvik 4, uloha 5
+//http://foja.dcs.fmph.uniba.sk/materialy/poznamky/cv04.pdf
+//(sigma, alfa, beta) = (0, 1, 2)
+//
+0 1 2 3
+a b
+0
+0 -> a 0 | b 1 | b b
+1 -> 2 | a a
+2 -> b 2 2 | epsilon
+3 -> 1 1 | a 3 | 1
+

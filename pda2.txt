@@ -1,0 +1,7 @@
+//Priklad z cviceni (uloha 3):
+//http://foja.dcs.fmph.uniba.sk/materialy/poznamky/cv08.pdf
+//
+0 Z
+0 a Z [(1,epsilon)]
+0 epsilon c [(0,Z)]
+1 b Z [(1,Z c c)]

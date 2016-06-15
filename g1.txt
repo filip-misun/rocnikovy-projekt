@@ -1,4 +1,11 @@
-<s>
-<s> -> <a> <s> a | a b | a b <s>
-<a> -> <b> <a> <b> | c
-<b> -> b c b | a c a
+//Priklad z cvik 4, uloha 1
+//http://foja.dcs.fmph.uniba.sk/materialy/poznamky/cv04.pdf
+//(sigma, alfa, beta, gamma, delta) = (0, 1, 2, 3, 4)
+//
+0 1 2 3 4
+a b
+0
+0 -> 1 1 | 4 | a 4
+1 -> 3 | a a | epsilon
+2 -> b 2 | b
+3 -> a 3 | a 3 3

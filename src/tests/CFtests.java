@@ -44,4 +44,12 @@ public class CFtests {
         g = g.chomsky();
         g.print(System.out);
     }
+    
+    public static void test4() throws FileNotFoundException{
+        CFGrammar g = new CFGrammar(new Scanner(new File("g3.txt")));
+        //g.print(System.out);
+        System.out.println("Epsilon-free grammar:");
+        g = g.epsilonFree();
+        g.print(System.out);
+    }
 }

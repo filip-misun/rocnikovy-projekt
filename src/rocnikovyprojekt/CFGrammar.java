@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -179,6 +180,7 @@ public class CFGrammar implements FiniteDescription{
         Set<Object> erasing = new HashSet<>();
         boolean changed = true;
         while(changed){
+            changed = false;
             for(Rule r : rules){
                 boolean add = true;
                 for(Object ch : r.word.getSymbols()){
@@ -192,7 +194,45 @@ public class CFGrammar implements FiniteDescription{
                 }
             }
         }
-        return null;
+        Set<Rule> newRules = new HashSet<>();
+        for(Rule r : rules){
+            Word w = r.word;
+            if(w.isEmpty()){
+                continue;
+            }
+            ArrayList<Boolean> omit = new ArrayList<>();
+            int count = 0;
+            for(int i = 0; i < w.length(); i++){
+                if(erasing.contains(w.symbolAt(i))){
+                    omit.add(true);
+                    count++;
+                } else {
+                    omit.add(false);
+                }
+            }
+            for(int mask = 0; mask < (1 << count); mask++){
+                int m = mask;
+                ArrayList<Object> newWord = new ArrayList<>();
+                for(int i = 0; i < w.length(); i++){
+                    if(omit.get(i)){
+                        if(m % 2 == 0){
+                            newWord.add(w.symbolAt(i));
+                        }
+                        m = m >> 1;
+                    } else {
+                        newWord.add(w.symbolAt(i));
+                    }
+                }
+                newRules.add(new Rule(r.nonterminal, new Word(newWord)));
+            }
+        }
+        for (Iterator<Rule> it = newRules.iterator(); it.hasNext();) {
+            Rule r = it.next();
+            if(r.word.isEmpty()){
+                it.remove();
+            }
+        }
+        return new CFGrammar(nonterminals, terminals, newRules, startSymbol);
     }
     
     public CFGrammar chomsky(){
@@ -275,7 +315,7 @@ public class CFGrammar implements FiniteDescription{
                 return false;
             }
             Rule r = (Rule) o;
-            return this.nonterminal == r.nonterminal && this.word == r.word;
+            return this.nonterminal.equals(r.nonterminal) && this.word.equals(r.word);
         }
         
         @Override

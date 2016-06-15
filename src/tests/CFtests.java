@@ -37,4 +37,11 @@ public class CFtests {
         g.reduce().print(System.out);
         
     }
+    
+    public static void test3() throws FileNotFoundException{
+        CFGrammar g = new CFGrammar(new Scanner(new File("g2.txt")));
+        //g.print(System.out);
+        g = g.chomsky();
+        g.print(System.out);
+    }
 }

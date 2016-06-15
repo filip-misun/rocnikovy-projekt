@@ -17,6 +17,6 @@ import tests.CFtests;
 public class Main {
 
 	public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException {
-            CFtests.test2();
+            CFtests.test3();
         }
 }

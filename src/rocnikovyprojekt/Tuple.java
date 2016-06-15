@@ -23,4 +23,9 @@ public class Tuple<F, S> {
 		return this.first.equals(pairo.first)
 				&& this.second.equals(pairo.second);
 	}
+        
+        @Override
+        public String toString(){
+            return "(" + first + "," + second + ")";
+        }
 }

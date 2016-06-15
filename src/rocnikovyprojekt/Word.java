@@ -36,6 +36,10 @@ public class Word {
         public Word(Word word){
             this.symbols = new ArrayList<>(word.symbols);
         }
+        
+        public Word(Object ch){
+            this.symbols.add(ch);
+        }
 	
 	public Object symbolAt(int index) {
 		return symbols.get(index);
@@ -73,7 +77,7 @@ public class Word {
             return w;
         }
         
-        public List<Object> getSymbols(){
+        public ArrayList<Object> getSymbols(){
             return new ArrayList<>(symbols);
         }
         
@@ -94,6 +98,9 @@ public class Word {
         
         @Override
         public String toString(){
+            if(symbols.isEmpty()){
+                return "epsilon";
+            }
             StringBuilder str = new StringBuilder();
             boolean space = false;
             for(Object s : symbols){

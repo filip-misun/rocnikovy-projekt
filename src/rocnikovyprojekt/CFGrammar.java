@@ -171,6 +171,86 @@ public class CFGrammar implements FiniteDescription{
         return g.removeUnreachable();
     }
     
+    /**
+     * Returns equivalent grammar without rules X -> epsilon. 
+     * @return 
+     */
+    public CFGrammar epsilonFree(){
+        Set<Object> erasing = new HashSet<>();
+        boolean changed = true;
+        while(changed){
+            for(Rule r : rules){
+                boolean add = true;
+                for(Object ch : r.word.getSymbols()){
+                    if(!erasing.contains(ch)){
+                        add = false;
+                        break;
+                    }
+                }
+                if(add){
+                    changed = changed || erasing.add(r.nonterminal);
+                }
+            }
+        }
+        return null;
+    }
+    
+    public CFGrammar chomsky(){
+        Set<Object> N = new HashSet<>(nonterminals);
+        Set<Rule> newRules = new HashSet<>(rules);
+        /* For each terminal a, we create nonterminal (-1,a).
+         * For these nonterminals, we create rules (-1,a) -> a. */
+        
+        
+        for(Rule r : newRules){
+            /* Each occurence of a we replace with (-1,a). */
+            ArrayList<Object> symbols = r.word.getSymbols();
+            for(int i = 0; i < symbols.size(); i++){
+                if(terminals.contains(symbols.get(i))){
+                    symbols.set(i, new Tuple(-1, symbols.get(i)));
+                }
+            }
+            /* To too short rules we add one nonterminal. */
+            if(symbols.size() == 1){
+                symbols.add(new Tuple(-1, Word.EMPTYWORD));
+            }
+            r.word = new Word(symbols);
+        }
+        /* We number all long rules. */
+        ArrayList<Rule> longRules = new ArrayList<>();
+        for(Rule r : newRules){
+            if(r.word.length() > 2){
+                longRules.add(r);
+            }
+        }
+        /* Each long rule we divide into several smaller rules. */
+        for(int i = 0; i < longRules.size(); i++){
+            Word w = longRules.get(i).word;
+            Object prev = longRules.get(i).nonterminal;
+            for(int j = 0; j < w.length() - 2; j++){
+                newRules.add(new Rule(prev,
+                        new Word(Arrays.asList(w.symbolAt(j), new Tuple(i,j)))));
+                prev = new Tuple(i,j);
+                N.add(prev);
+            }
+            Object[] end = {w.symbolAt(w.length() - 2), w.symbolAt(w.length() - 1)}; 
+            newRules.add(new Rule(prev, new Word(end)));
+            newRules.remove(longRules.get(i));
+        }
+        /* We add new nonterminals (-1,a) to the set of nonterminals and 
+           we add new rules from this nonterminals. */
+        for(Object ch : terminals){
+            Object nonterm = new Tuple(-1, ch);
+            N.add(nonterm);
+            newRules.add(new Rule(new Tuple(-1, ch), new Word(ch)));
+        }
+        /* Same for (-1,epsilon) */
+        Object nonterm = new Tuple(-1, Word.EMPTYWORD);
+        N.add(nonterm);
+        newRules.add(new Rule(new Tuple(-1, Word.EMPTYWORD), Word.EMPTYWORD));
+        return new CFGrammar(N, terminals, newRules, startSymbol);
+    }
+    
     public void print(PrintStream out){
         Sets.println(nonterminals);
         Sets.println(terminals);

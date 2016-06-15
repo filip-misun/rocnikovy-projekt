@@ -77,9 +77,9 @@ public class DeterministicPushdownAutomaton implements FiniteDescription {
                     public boolean equals(Object o){
                         if(o instanceof Input){
                             Input in = (Input) o;
-                            return in.state == this.state && 
-                                    in.stackSymbol == this.stackSymbol &&
-                                    in.tapeSymbol == this.tapeSymbol;
+                            return in.state.equals(this.state) && 
+                                    in.stackSymbol.equals(this.stackSymbol) &&
+                                    in.tapeSymbol.equals(this.tapeSymbol);
                         }
                         else return false;
                     }

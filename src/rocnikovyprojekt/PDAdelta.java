@@ -24,6 +24,10 @@ public class PDAdelta {
 
     private Map<Input, Set<Output>> map = new HashMap<>();
     
+    public PDAdelta(){
+        
+    }
+    
     public PDAdelta(Scanner s) throws DataFormatException{
         while(s.hasNext()){
             String line = s.nextLine();
@@ -44,7 +48,15 @@ public class PDAdelta {
                 if(outargs.length < 2){
                     throw new DataFormatException("The output has too few arguments: " + line + ".");
                 }
-                add(args[0], args[1], args[2], outargs[0], new Word(outargs[1].split(" ")));
+                Object ch = args[1];
+                if(args[1].equals("epsilon")){
+                    ch = Word.EMPTYWORD;
+                }
+                Word w = Word.EMPTYWORD;
+                if(!outargs[1].equals("epislon")){
+                    w = new Word(outargs[1].split(" "));
+                }
+                add(args[0], ch, args[2], outargs[0], w);
             }
         }
     }

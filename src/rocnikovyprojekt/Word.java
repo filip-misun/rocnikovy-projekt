@@ -89,4 +89,18 @@ public class Word {
             }
             return str.toString();
         }
+        
+        @Override
+        public boolean equals(Object o){
+            if(o instanceof Word){
+                return symbols.equals(((Word) o).symbols);
+            } else {
+                return false;
+            }
+        }
+        
+        @Override
+        public int hashCode(){
+            return symbols.hashCode();
+        }
 }

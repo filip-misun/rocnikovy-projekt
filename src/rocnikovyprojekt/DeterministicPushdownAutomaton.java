@@ -24,14 +24,14 @@ public class DeterministicPushdownAutomaton implements FiniteDescription {
 	public boolean accepts(Word word) {
 		Object currentState = startState;
 		Object currentStackSymbol;
-		Word stack = new Word();
-		stack.append(startStackSymbol);
+		ArrayList<Object> stack = new ArrayList<>();
+		stack.add(startStackSymbol);
 		
 		for (int i = 0; i < word.length(); i++) {
 			if (stack.isEmpty()) {
 				return false;
 			}
-			currentStackSymbol = stack.pop();
+			currentStackSymbol = stack.remove(stack.size()-1);
 			if (!transitionFunction.containsKey(currentState, word.symbolAt(i),
 					currentStackSymbol)) {
 				return false;
@@ -39,7 +39,7 @@ public class DeterministicPushdownAutomaton implements FiniteDescription {
 			TransitionFunction.Output val = transitionFunction.get(currentState,
 					word.symbolAt(i), currentStackSymbol);
 			currentState = val.newState;
-			stack.append(val.pushToStack);
+			stack.add(val.pushToStack);
 		}
 		return finalStates.contains(currentState);
 	}

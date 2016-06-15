@@ -53,7 +53,7 @@ public class PDAdelta {
                     ch = Word.EMPTYWORD;
                 }
                 Word w = Word.EMPTYWORD;
-                if(!outargs[1].equals("epislon")){
+                if(!outargs[1].equals("epsilon")){
                     w = new Word(outargs[1].split(" "));
                 }
                 add(args[0], ch, args[2], outargs[0], w);

@@ -34,32 +34,40 @@ public class PDAtoCFG implements Conversion {
         /* The set of rules of new grammar */
         rules = new HashSet<>();
         /* Start symbol of the new grammar. */
-        Object startSymbol = new Object();
+        Object startSymbol = "sigma";
         /* The set of nonterminals consist of [p,Z,q] for each states p, q
          * and each working symbol Z. We iterate through all such triplets
          * and for each such nonterminal we add rules into grammat;
          */
+        //System.out.println(afrom.getDelta().get("0", Word.EMPTYWORD, "c"));
         for(Object p : states){
             for(Object Z : wa){
                 for(Object q : states){
                     Object nonterm = Arrays.asList(p, Z, q);
+                    //System.out.println(nonterm);
+                    //System.out.println(afrom.getDelta().get("0", Word.EMPTYWORD, "c"));
                     for(Object ch : afrom.getAlphabet()){
+                        //System.out.println(p + " " + ch + " " + Z + "->" + afrom.getDelta().get(p, ch, Z));
                         for(Output out : afrom.getDelta().get(p, ch, Z)){
                             if(out.pushToStack.isEmpty()){
                                 if(q.equals(out.newState)){
                                     rules.add(new Rule(nonterm,
                                             new Word(Arrays.asList(ch))));
-                                } else {
-                                    makeRules(p, q, out.pushToStack, nonterm,
-                                            new Word(Arrays.asList(ch)));
+                                } 
+                            } else {
+                                Word w = Word.EMPTYWORD;
+                                if(!ch.equals(Word.EMPTYWORD)){
+                                    w = new Word(Arrays.asList(ch));
                                 }
+                                makeRules(p, q, new Word(out.pushToStack), nonterm,
+                                        w);
                             }
                         }
                     }
                 }
             }
             Word w = new Word();
-            w.append(Arrays.asList(afrom.getStartState(), afrom.getStackStart(), p));
+            w = w.append(Arrays.asList(afrom.getStartState(), afrom.getStackStart(), p));
             rules.add(new Rule(startSymbol, w));
         }
         return new CFGrammar(rules, startSymbol);
@@ -82,16 +90,15 @@ public class PDAtoCFG implements Conversion {
             return;
         }
         if(stack.length() == 1){
-            rule.append(Arrays.asList(from, stack.pop(), to));
+            rule = rule.append(Arrays.asList(from, stack.last(), to));
             rules.add(new Rule(nonterminal, rule));
             return;
         }
-        Object Z = stack.pop();
+        Object Z = stack.last();
         for(Object state : states){
             Object next = Arrays.asList(from, Z, state);
-            Word newRule = new Word(rule);
-            newRule.append(next);
-            makeRules(next, to, new Word(stack), nonterminal, newRule);
+            Word newRule = rule.append(next);
+            makeRules(state, to, stack.pop(), nonterminal, newRule);
         }
     }
     

@@ -18,10 +18,9 @@ import java.util.zip.DataFormatException;
  */
 public class CFtests {
     public static void test1() throws DataFormatException, FileNotFoundException{
-        Scanner s = new Scanner(new File("pda1.txt"));
+        Scanner s = new Scanner(new File("pda2.txt"));
         PushdownAutomaton a = new PushdownAutomaton(s);
-        //a.print(System.out);
-        
+        //System.out.println(a.getDelta().get("0", Word.EMPTYWORD, "c"));
         CFGrammar G = (CFGrammar) Conversions.convert(a, CFGrammar.class);
         G.print(System.out);
     }

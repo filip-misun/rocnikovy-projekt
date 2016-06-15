@@ -41,12 +41,18 @@ public class Word {
 		return symbols.get(index);
 	}
 	
-	public void append(Object symbol) {
-		symbols.add(symbol);
+	public Word append(Object symbol) {
+            Word w = new Word();
+            w.symbols = new ArrayList<>(symbols);
+            w.symbols.add(symbol);
+            return w;
 	}
         
-        public void append(Word word){
-            symbols.addAll(word.symbols);
+        public Word append(Word word){
+            Word w = new Word();
+            w.symbols = new ArrayList<>(symbols);
+            w.symbols.addAll(word.symbols);
+            return w;
         }
 	
 	public int length() {
@@ -57,8 +63,18 @@ public class Word {
             return symbols.isEmpty();
         }
         
-        public Object pop(){
-            return symbols.remove(symbols.size() - 1);
+        public Object last(){
+            return symbols.get(symbols.size() - 1);
+        }
+        
+        public Word pop(){
+            Word w = new Word(symbols);
+            w.symbols.remove(w.symbols.size() - 1);
+            return w;
+        }
+        
+        public List<Object> getSymbols(){
+            return new ArrayList<>(symbols);
         }
         
         /**

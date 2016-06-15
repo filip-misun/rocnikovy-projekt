@@ -35,6 +35,8 @@ public class PDAtoCFG implements Conversion {
         rules = new HashSet<>();
         /* Start symbol of the new grammar. */
         Object startSymbol = "sigma";
+        Set<Object> nonterminals = new HashSet<>();
+        nonterminals.add(startSymbol);
         /* The set of nonterminals consist of [p,Z,q] for each states p, q
          * and each working symbol Z. We iterate through all such triplets
          * and for each such nonterminal we add rules into grammat;
@@ -44,6 +46,7 @@ public class PDAtoCFG implements Conversion {
             for(Object Z : wa){
                 for(Object q : states){
                     Object nonterm = Arrays.asList(p, Z, q);
+                    nonterminals.add(nonterm);
                     //System.out.println(nonterm);
                     //System.out.println(afrom.getDelta().get("0", Word.EMPTYWORD, "c"));
                     for(Object ch : afrom.getAlphabet()){
@@ -70,7 +73,7 @@ public class PDAtoCFG implements Conversion {
             w = w.append(Arrays.asList(afrom.getStartState(), afrom.getStackStart(), p));
             rules.add(new Rule(startSymbol, w));
         }
-        return new CFGrammar(rules, startSymbol);
+        return new CFGrammar(nonterminals, afrom.getAlphabet(), rules, startSymbol);
     }
 
     @Override

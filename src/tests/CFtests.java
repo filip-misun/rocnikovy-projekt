@@ -24,4 +24,17 @@ public class CFtests {
         CFGrammar G = (CFGrammar) Conversions.convert(a, CFGrammar.class);
         G.print(System.out);
     }
+    
+    public static void test2() throws FileNotFoundException{
+        CFGrammar g = new CFGrammar(new Scanner(new File("g1.txt")));
+        //g.print(System.out);
+        CFGrammar g1 = g.removeNonterminating();
+        System.out.println("Afrer removing nonterminating:");
+        g1.print(System.out);
+        System.out.println("Afrer removing unreachable:");
+        g1.removeUnreachable().print(System.out);
+        System.out.println("Reduced:");
+        g.reduce().print(System.out);
+        
+    }
 }

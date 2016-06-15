@@ -94,4 +94,16 @@ public class Sets {
 		
 		return t;
 	}
+        
+        public static void println(Set<Object> set){
+            boolean space = false;
+            for(Object o : set){
+                if(space){
+                    System.out.print(" ");
+                }
+                System.out.print(o);
+                space = true;
+            }
+            System.out.println();
+        }
 }

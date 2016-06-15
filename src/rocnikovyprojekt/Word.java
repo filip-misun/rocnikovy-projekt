@@ -1,6 +1,8 @@
 package rocnikovyprojekt;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 public class Word {
@@ -17,9 +19,13 @@ public class Word {
 		super();
 	}
 	
-	public Word(List<Object> symbols) {
-		this.symbols = symbols;
+	public Word(Collection<Object> symbols) {
+		this.symbols = new ArrayList<>(symbols);
 	}
+        
+        public Word(Object[] array){
+            symbols.addAll(Arrays.asList(array));
+        }
         
         public Word(String s){
             for(int i = 0; i < s.length(); i++){

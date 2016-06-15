@@ -91,7 +91,7 @@ public class DeterministicPushdownAutomaton implements FiniteDescription {
                     
                     @Override
                     public String toString(){
-                        return state + "," + tapeSymbol + "," + stackSymbol;
+                        return state + " " + tapeSymbol + " " + stackSymbol;
                     }
                 }
                 
@@ -104,6 +104,17 @@ public class DeterministicPushdownAutomaton implements FiniteDescription {
 				this.newState = newState;
 				this.pushToStack = pushToStack;
 			}
+                        
+                        /**
+                         * Initializes Output form String.
+                         * The format of the string is (state;word).
+                         * @param s 
+                         */
+                        public Output(String s){
+                            String str = s.substring(1, s.length() - 1);
+                            newState = str.split(",")[0];
+                            pushToStack = new Word(str.split(",")[1].split(" "));
+                        }
 			
 			@Override
 			public boolean equals(Object obj) {

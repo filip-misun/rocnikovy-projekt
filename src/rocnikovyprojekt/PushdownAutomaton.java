@@ -2,7 +2,9 @@ package rocnikovyprojekt;
 
 import java.io.PrintStream;
 import java.util.List;
+import java.util.Scanner;
 import java.util.Set;
+import java.util.zip.DataFormatException;
 
 public class PushdownAutomaton implements FiniteDescription {
 
@@ -21,6 +23,48 @@ public class PushdownAutomaton implements FiniteDescription {
         startState = q0;
         delta = d;
         stackStart = Z0;
+    }
+    
+    public PushdownAutomaton(PDAdelta d, Object q0,
+            Object Z0){
+        startState = q0;
+        delta = d;
+        stackStart = Z0;
+        updateSets();
+    }
+    
+    /**
+     * Initializes PDA from Scanner.
+     * Input format:
+     * First line contains start state and start stack symbol.
+     * Rest of lines contains lines of delta-function.
+     * Each of that lines has format
+     * state tape stack [(output),(output),...,(output)],
+     * where (output) has format (newState pushToStack).
+     * @param s Scanner, which automaton is initialized from.
+     * @throws java.util.zip.DataFormatException if the file has wrong format.
+     */
+    public PushdownAutomaton(Scanner s) throws DataFormatException{
+        String line = s.nextLine();
+        while(line.startsWith("//")){
+            line = s.nextLine();
+        }
+        String args[] = line.split(" ");
+        if(args.length < 2){
+            throw new DataFormatException("The first line does not contain start state and start stack symbol.");
+        }
+        startState = args[0];
+        stackStart = args[1];
+        delta = new PDAdelta(s);
+        updateSets();
+    }
+    
+    private void updateSets(){
+        states = delta.getStates();
+        states.add(startState);
+        alphabet = delta.getAlphabet();
+        workingAlphabet = delta.getWorkingAlphabet();
+        workingAlphabet.add(stackStart);
     }
     
     public Set<Object> getStates(){
@@ -47,16 +91,12 @@ public class PushdownAutomaton implements FiniteDescription {
         return delta;
     }
     
-    public PushdownAutomaton(PDAdelta d, Object q0,
-            Object Z0){
-        startState = q0;
-        delta = d;
-        stackStart = Z0;
-    }
-    
+    /**
+     * Prints this automaton to the specified PrintStream.
+     * @param out 
+     */
     public void print(PrintStream out){
         out.println(startState + " " + stackStart);
-        out.println();
         delta.print(out);
     }
     

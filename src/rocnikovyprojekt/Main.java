@@ -12,12 +12,11 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
+import tests.CFtests;
 
 public class Main {
 
 	public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException {
-            
-            CFGrammar g = new CFGrammar(new Scanner(new File("g1.txt")));
-            g.print(System.out);
-	}
+            CFtests.test1();
+        }
 }

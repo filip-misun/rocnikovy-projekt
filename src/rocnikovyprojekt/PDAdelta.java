@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package rocnikovyprojekt;
 
 import java.io.PrintStream;
@@ -17,7 +12,7 @@ import rocnikovyprojekt.DeterministicPushdownAutomaton.TransitionFunction.Input;
 import rocnikovyprojekt.DeterministicPushdownAutomaton.TransitionFunction.Output;
 
 /**
- *
+ * Class representing transition function for pushdown automatons.
  * @author Jozef Rajník
  */
 public class PDAdelta {
@@ -60,7 +55,17 @@ public class PDAdelta {
             }
         }
     }
-
+    
+    /**
+     * Adds move from specified configuration into new state pushing specified
+     * word to stack. Note that this method only add one from (possibly) many
+     * moves from specified configuration.
+     * @param state current state
+     * @param tapeSymbol currently read symbol on tape or epsilon
+     * @param stackSymbol the top stack symbol
+     * @param newState new state
+     * @param pushToStack word which will be pushed to stack 
+     */
     public void add(Object state, Object tapeSymbol, Object stackSymbol,
             Object newState, Word pushToStack) {
         Input in = new Input(state, tapeSymbol, stackSymbol);

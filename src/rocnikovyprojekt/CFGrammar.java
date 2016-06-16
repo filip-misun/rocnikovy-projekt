@@ -226,11 +226,17 @@ public class CFGrammar implements FiniteDescription{
                 newRules.add(new Rule(r.nonterminal, new Word(newWord)));
             }
         }
+        /* We remove epsilon-rules. */
         for (Iterator<Rule> it = newRules.iterator(); it.hasNext();) {
             Rule r = it.next();
             if(r.word.isEmpty()){
                 it.remove();
             }
+        }
+        /* For equivalence with formrer grammar, we add rule
+         * startSymbol -> epsilon, if necesarry. */
+        if(erasing.contains(startSymbol)){
+            newRules.add(new Rule(startSymbol, Word.EMPTYWORD));
         }
         return new CFGrammar(nonterminals, terminals, newRules, startSymbol);
     }

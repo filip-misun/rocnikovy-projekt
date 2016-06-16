@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -177,20 +178,20 @@ public class CFGrammar implements FiniteDescription{
      * @return 
      */
     public CFGrammar epsilonFree(){
-        Set<Object> erasing = new HashSet<>();
+        Set<Object> nullable = new HashSet<>();
         boolean changed = true;
         while(changed){
             changed = false;
             for(Rule r : rules){
                 boolean add = true;
                 for(Object ch : r.word.getSymbols()){
-                    if(!erasing.contains(ch)){
+                    if(!nullable.contains(ch)){
                         add = false;
                         break;
                     }
                 }
                 if(add){
-                    changed = changed || erasing.add(r.nonterminal);
+                    changed = changed || nullable.add(r.nonterminal);
                 }
             }
         }
@@ -203,7 +204,7 @@ public class CFGrammar implements FiniteDescription{
             ArrayList<Boolean> omit = new ArrayList<>();
             int count = 0;
             for(int i = 0; i < w.length(); i++){
-                if(erasing.contains(w.symbolAt(i))){
+                if(nullable.contains(w.symbolAt(i))){
                     omit.add(true);
                     count++;
                 } else {
@@ -235,7 +236,7 @@ public class CFGrammar implements FiniteDescription{
         }
         /* For equivalence with formrer grammar, we add rule
          * startSymbol -> epsilon, if necesarry. */
-        if(erasing.contains(startSymbol)){
+        if(nullable.contains(startSymbol)){
             newRules.add(new Rule(startSymbol, Word.EMPTYWORD));
         }
         return new CFGrammar(nonterminals, terminals, newRules, startSymbol);
@@ -297,8 +298,61 @@ public class CFGrammar implements FiniteDescription{
         return new CFGrammar(N, terminals, newRules, startSymbol);
     }
     
-    public CFGrammar removeChainRules(){
+    public CFGrammar strictChomsky(){
+        
         return null;
+    }
+    
+    private boolean isChainRule(Rule r){
+        return r.word.length() == 1 && nonterminals.contains(r.word.symbolAt(0));
+    }
+    
+    public CFGrammar removeChainRules(){
+        /* We represent nonterminals as verticies of a graph. Oriented edges
+         * represent chain rules. */
+        HashMap<Object, ArrayList<Object>> adj = new HashMap<>();
+        for(Rule r : rules){
+            if(isChainRule(r)){
+                ArrayList<Object> a = adj.remove(r.nonterminal);
+                if(a == null){
+                    a = new ArrayList<>();
+                }
+                a.add(r.word.symbolAt(0));
+                adj.put(r.nonterminal, a);
+            }
+        }
+        /* For each nonterminal n, we determine set of nonterminals
+         * which are form n reachable. */
+        HashMap<Object, Set<Object>> reachable = new HashMap<>();
+        for(Object n : nonterminals){
+            Set<Object> visited = new HashSet<>();
+            LinkedList<Object> queue = new LinkedList<>();
+            queue.addLast(n);
+            while(!queue.isEmpty()){
+                Object current = queue.removeFirst();
+                visited.add(current);
+                for(Object neighb : adj.getOrDefault(current, new ArrayList<>())){
+                    if(!visited.contains(neighb)){
+                        queue.addLast(neighb);
+                    }
+                }
+            }
+            reachable.put(n, visited);
+        }
+        Set<Rule> newRules = new HashSet<>();
+        for(Rule r : rules){
+            if(isChainRule(r)){
+                for(Rule s : rules){
+                    if(reachable.get(r.word.symbolAt(0)).contains(s.nonterminal)
+                            && !isChainRule(s)){
+                        newRules.add(new Rule(r.nonterminal, s.word));
+                    }
+                }
+            } else {
+                newRules.add(r);
+            }
+        }
+        return new CFGrammar(nonterminals, terminals, newRules, startSymbol);
     }
     
     public void print(PrintStream out){

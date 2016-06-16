@@ -52,4 +52,12 @@ public class CFtests {
         g = g.epsilonFree();
         g.print(System.out);
     }
+    
+    public static void test5() throws FileNotFoundException{
+        CFGrammar g = new CFGrammar(new Scanner(new File("g4.txt")));
+        //g.print(System.out);
+        System.out.println("Grammar without chain rules:");
+        g = g.removeChainRules();
+        g.print(System.out);
+    }
 }

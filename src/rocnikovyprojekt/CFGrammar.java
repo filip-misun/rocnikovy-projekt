@@ -299,8 +299,10 @@ public class CFGrammar implements FiniteDescription{
     }
     
     public CFGrammar strictChomsky(){
-        
-        return null;
+        CFGrammar g = this.chomsky();
+        g = g.epsilonFree();
+        g = g.removeChainRules();
+        return g;
     }
     
     private boolean isChainRule(Rule r){

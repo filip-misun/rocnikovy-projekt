@@ -41,8 +41,12 @@ public class CFtests {
     public static void test3() throws FileNotFoundException{
         CFGrammar g = new CFGrammar(new Scanner(new File("g2.txt")));
         //g.print(System.out);
-        g = g.chomsky();
-        g.print(System.out);
+        System.out.println("Chomsky form:");
+        CFGrammar g1 = g.chomsky();
+        g1.print(System.out);
+        System.out.println("Strict Chomsky form:");
+        CFGrammar g2 = g.strictChomsky();
+        g2.print(System.out);
     }
     
     public static void test4() throws FileNotFoundException{

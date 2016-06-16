@@ -8,6 +8,7 @@ package rocnikovyprojekt;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -26,6 +27,7 @@ public class CFGrammar implements FiniteDescription{
     Set<Object> nonterminals = new HashSet<>();
     Set<Object> terminals = new HashSet<>();
     Set<Rule> rules;
+    Map<Object, Set<Word>> rulesMap = null;
     Object startSymbol;
     
     public CFGrammar(Set<Object> N, Set<Object> T, Set<Rule> P, Object s){
@@ -360,7 +362,7 @@ public class CFGrammar implements FiniteDescription{
     public boolean accepts(Word w){
         CFGrammar g = this.strictChomsky();
         if(w.isEmpty()){
-            return rules.contains(new Rule(startSymbol, Word.EMPTYWORD));
+            return g.rules.contains(new Rule(g.startSymbol, Word.EMPTYWORD));
         }
         int len = w.length();
         ArrayList<ArrayList<Set<Object>>> N = new ArrayList<>();
@@ -370,7 +372,7 @@ public class CFGrammar implements FiniteDescription{
                 N.get(i).add(new HashSet<>());
             }
         }
-        for(Rule r : rules){
+        for(Rule r : g.rules){
             if(r.word.length() == 1){
                 for(int i = 0; i < w.length(); i++){
                     if(w.symbolAt(i).equals(r.word.symbolAt(0))){
@@ -382,7 +384,7 @@ public class CFGrammar implements FiniteDescription{
         for(int diff = 1; diff < w.length(); diff++){
             for(int i = 0; i + diff < w.length(); i++){
                 for(int k = i; k < i + diff; k++){
-                    for(Rule r : rules){
+                    for(Rule r : g.rules){
                         if(r.word.length() != 2){
                             continue;
                         }
@@ -399,15 +401,35 @@ public class CFGrammar implements FiniteDescription{
 //                System.out.println(i + "," + (i+diff) + ": " + N.get(i).get(i + diff));
 //            }
 //        }
-        return N.get(0).get(w.length()-1).contains(startSymbol);
+        return N.get(0).get(w.length()-1).contains(g.startSymbol);
+    }
+    
+    private void groupRules(){
+        rulesMap = new HashMap<>();
+        for(Rule r : rules){
+            Set<Word> val = rulesMap.remove(r.nonterminal);
+            if(val == null){
+                val = new HashSet<>();
+            }
+            val.add(r.word);
+            rulesMap.put(r.nonterminal, val);
+        }
     }
     
     public void print(PrintStream out){
+        groupRules();
         out.println(Sets.toString(nonterminals));
         out.println(Sets.toString(terminals));
         out.println(startSymbol);
-        for(Rule r : rules){
-            out.println(r.nonterminal + " -> " + r.word);
+        for(Object n : nonterminals){
+            out.print(n + " -> ");
+            boolean space = false;
+            for(Word w : rulesMap.getOrDefault(n, new HashSet<>())){
+                if(space) out.print(" | ");
+                out.print(w);
+                space = true;
+            }
+            out.println();
         }
     }
     
@@ -432,6 +454,11 @@ public class CFGrammar implements FiniteDescription{
         @Override
         public int hashCode(){
             return Objects.hash(nonterminal, word);
+        }
+        
+        @Override
+        public String toString(){
+            return nonterminal + " -> " + word;
         }
     }
     

@@ -67,14 +67,23 @@ public class CFtests {
     
     public static void test6() throws FileNotFoundException{
         CFGrammar g = new CFGrammar(new Scanner(new File("cfg5.txt")));
-        //g.print(System.out);
-        g = g.strictChomsky();
-        //g.print(System.out);
-        System.out.println(g.accepts(new Word("aabb"))); //true
-        System.out.println(g.accepts(new Word("aabbb")));
-        System.out.println(g.accepts(new Word(Word.EMPTYWORD))); //true
-        System.out.println(g.accepts(new Word("ababab")));
-        System.out.println(g.accepts(new Word("aaaaaaaaaabbbbbbbbbb"))); //true
-        
+        assert g.accepts(new Word("aabb")) == true; //true
+        assert g.accepts(new Word("aabbb")) == false;
+        assert g.accepts(new Word(Word.EMPTYWORD)) == true; //true
+        assert g.accepts(new Word("ababab")) == false;
+        assert g.accepts(new Word("aaaaaaaaaabbbbbbbbbb")) == true; //true
+        System.out.println("Test finished.");
+    }
+    
+    public static void test7() throws FileNotFoundException{
+        CFGrammar g = new CFGrammar(new Scanner(new File("cfg1.txt")));
+        g.strictChomsky().print(System.out);
+        System.out.println(g.accepts(new Word("((123+22)*2)"))); //true
+        System.out.println(g.accepts(new Word("(1+1)"))); //true
+        System.out.println(g.accepts(new Word(Word.EMPTYWORD)));
+        System.out.println(g.accepts(new Word("1221201223221312"))); //true
+        System.out.println(g.accepts(new Word("(12+(05*62))")));
+        System.out.println(g.accepts(new Word("((23+(10*10))*(1+(2+3302)))"))); //true
+        System.out.println("Test finished.");
     }
 }

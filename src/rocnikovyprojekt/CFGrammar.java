@@ -357,6 +357,51 @@ public class CFGrammar implements FiniteDescription{
         return new CFGrammar(nonterminals, terminals, newRules, startSymbol);
     }
     
+    public boolean accepts(Word w){
+        CFGrammar g = this.strictChomsky();
+        if(w.isEmpty()){
+            return rules.contains(new Rule(startSymbol, Word.EMPTYWORD));
+        }
+        int len = w.length();
+        ArrayList<ArrayList<Set<Object>>> N = new ArrayList<>();
+        for(int i = 0; i < w.length(); i++){
+            N.add(new ArrayList<>());
+            for(int j = 0; j < w.length(); j++){
+                N.get(i).add(new HashSet<>());
+            }
+        }
+        for(Rule r : rules){
+            if(r.word.length() == 1){
+                for(int i = 0; i < w.length(); i++){
+                    if(w.symbolAt(i).equals(r.word.symbolAt(0))){
+                        N.get(i).get(i).add(r.nonterminal);
+                    }
+                }
+            }
+        }
+        for(int diff = 1; diff < w.length(); diff++){
+            for(int i = 0; i + diff < w.length(); i++){
+                for(int k = i; k < i + diff; k++){
+                    for(Rule r : rules){
+                        if(r.word.length() != 2){
+                            continue;
+                        }
+                        if(N.get(i).get(k).contains(r.word.symbolAt(0)) &&
+                                N.get(k+1).get(i+diff).contains(r.word.symbolAt(1))){
+                            N.get(i).get(i + diff).add(r.nonterminal);
+                        }
+                    }
+                }
+            }
+        }
+//        for(int diff = 0; diff < w.length(); diff++){
+//            for(int i = 0; i + diff < w.length(); i++){
+//                System.out.println(i + "," + (i+diff) + ": " + N.get(i).get(i + diff));
+//            }
+//        }
+        return N.get(0).get(w.length()-1).contains(startSymbol);
+    }
+    
     public void print(PrintStream out){
         out.println(Sets.toString(nonterminals));
         out.println(Sets.toString(terminals));

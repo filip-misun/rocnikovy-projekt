@@ -64,4 +64,17 @@ public class CFtests {
         g = g.removeChainRules();
         g.print(System.out);
     }
+    
+    public static void test6() throws FileNotFoundException{
+        CFGrammar g = new CFGrammar(new Scanner(new File("cfg5.txt")));
+        //g.print(System.out);
+        g = g.strictChomsky();
+        //g.print(System.out);
+        System.out.println(g.accepts(new Word("aabb"))); //true
+        System.out.println(g.accepts(new Word("aabbb")));
+        System.out.println(g.accepts(new Word(Word.EMPTYWORD))); //true
+        System.out.println(g.accepts(new Word("ababab")));
+        System.out.println(g.accepts(new Word("aaaaaaaaaabbbbbbbbbb"))); //true
+        
+    }
 }

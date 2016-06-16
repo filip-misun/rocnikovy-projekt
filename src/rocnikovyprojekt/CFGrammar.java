@@ -243,12 +243,12 @@ public class CFGrammar implements FiniteDescription{
     
     public CFGrammar chomsky(){
         Set<Object> N = new HashSet<>(nonterminals);
-        Set<Rule> newRules = new HashSet<>(rules);
+        Set<Rule> newRules = new HashSet<>();
         /* For each terminal a, we create nonterminal (-1,a).
          * For these nonterminals, we create rules (-1,a) -> a. */
         
         
-        for(Rule r : newRules){
+        for(Rule r : rules){
             /* Each occurence of a we replace with (-1,a). */
             ArrayList<Object> symbols = r.word.getSymbols();
             for(int i = 0; i < symbols.size(); i++){
@@ -260,7 +260,7 @@ public class CFGrammar implements FiniteDescription{
             if(symbols.size() == 1){
                 symbols.add(new Tuple(-1, Word.EMPTYWORD));
             }
-            r.word = new Word(symbols);
+            newRules.add(new Rule(r.nonterminal, new Word(symbols)));
         }
         /* We number all long rules. */
         ArrayList<Rule> longRules = new ArrayList<>();
@@ -295,6 +295,10 @@ public class CFGrammar implements FiniteDescription{
         N.add(nonterm);
         newRules.add(new Rule(new Tuple(-1, Word.EMPTYWORD), Word.EMPTYWORD));
         return new CFGrammar(N, terminals, newRules, startSymbol);
+    }
+    
+    public CFGrammar removeChainRules(){
+        return null;
     }
     
     public void print(PrintStream out){

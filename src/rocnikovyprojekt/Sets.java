@@ -95,15 +95,16 @@ public class Sets {
 		return t;
 	}
         
-        public static void println(Set<Object> set){
+        public static String toString(Set<Object> set){
+            StringBuilder str = new StringBuilder();
             boolean space = false;
             for(Object o : set){
                 if(space){
-                    System.out.print(" ");
+                    str.append(" ");
                 }
-                System.out.print(o);
+                str.append(o);
                 space = true;
             }
-            System.out.println();
+            return str.toString();
         }
 }

@@ -356,8 +356,8 @@ public class CFGrammar implements FiniteDescription{
     }
     
     public void print(PrintStream out){
-        Sets.println(nonterminals);
-        Sets.println(terminals);
+        out.println(Sets.toString(nonterminals));
+        out.println(Sets.toString(terminals));
         out.println(startSymbol);
         for(Rule r : rules){
             out.println(r.nonterminal + " -> " + r.word);

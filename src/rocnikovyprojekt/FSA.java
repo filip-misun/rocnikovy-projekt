@@ -1,11 +1,13 @@
 package rocnikovyprojekt;
 
 import java.io.PrintStream;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
+import java.util.Scanner;
 import java.util.Set;
 
 public class FSA implements FiniteDescription {
@@ -25,15 +27,26 @@ public class FSA implements FiniteDescription {
 		symbolsAndEpsilon.add(Word.EMPTYWORD);		
 	}
 		
-	/*
+	/**
+         * Initializes FSA from a given Scanner.
+         * The inut format is following:
+         * - first line contains start states (space-separated),
+         * - second line contains final states (space-separated),
+         * - following lines contain lines of transition function.
+         * One line of transition function is of format
+         * cstate character [state, state, ..., state],
+         * where cstate is current state, character is charecter read from 
+         * the tape and [state, ..., state] is set of new states.
+         * @param s 
+         */
 	public FSA(Scanner s) {
-		initialState = s.nextLine();
-		finalStates = new HashSet<>();
-		for (String str : s.nextLine().split(" ")) {
-			finalStates.add(str);
-		}
+		String line = s.nextLine();
+                initialStates = new HashSet<>(Arrays.asList(line.split(" ")));
+                line = s.nextLine();
+		finalStates = new HashSet<>(Arrays.asList(line.split(" ")));
+                delta = new Delta(s);
 	}
-	*/
+	
 	
 	public Set<Object> getInitialStates() {
 		return initialStates;
@@ -485,16 +498,8 @@ public class FSA implements FiniteDescription {
 	 *            PrintStream which this shoud be printed to.
 	 */
 	public void print(PrintStream out) {
-		out.println(initialStates);
-		boolean first = true;
-		for (Object state : finalStates) {
-			if (!first) {
-				out.print(" ");
-			}
-			out.print(state);
-			first = false;
-		}
-		out.println();
+		out.println(Sets.toString(initialStates));
+		out.println(Sets.toString(finalStates));
 		delta.print(out);
 	}
 
@@ -505,14 +510,24 @@ public class FSA implements FiniteDescription {
 		public Delta() {
 		}
 		
-		/*
-		public Delta(Scanner s) {
-			while (s.hasNext()) {
-				String[] line = s.nextLine().split(" ");
-				put(line[0], line[1], line[2]);
-			}
-		}
-		*/
+		public Delta(Scanner s){
+                    while(s.hasNext()){
+                        String[] line = s.nextLine().split(" ");
+                        Object character = line[1];
+                        if(line[1].toLowerCase().equals("epsilon")){
+                            character = Word.EMPTYWORD;
+                        }
+                        HashSet<Object> set = new HashSet<>();
+                        if(line[2].charAt(0) == '[' &&
+                                line[2].charAt(line[2].length() - 1) == ']'){
+                            String arg2 = new String(line[2].toCharArray(), 1, line[2].length() - 2);
+                            set.addAll(Arrays.asList(arg2.split(", ")));
+                        } else {
+                            set.add(line[2]);
+                        }
+                        put(line[0], character, set);
+                    }
+                }
 		
 		public Delta(HashMap<FAInput, Set<Object>> map) {
 			this.map = map;

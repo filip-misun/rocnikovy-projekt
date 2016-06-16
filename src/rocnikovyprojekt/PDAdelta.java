@@ -65,10 +65,12 @@ public class PDAdelta {
             Object newState, Word pushToStack) {
         Input in = new Input(state, tapeSymbol, stackSymbol);
         Output out = new Output(newState, pushToStack);
-        if(!map.containsKey(in)){
-            map.put(in, new HashSet<>());
+        Set<Output> outputs = map.remove(in);
+        if(outputs == null){
+            outputs = new HashSet<>();
         }
-        map.get(in).add(out);
+        outputs.add(out);
+        map.put(in, outputs);
     }
 
     public Set<Output> get(Object state, Object tapeSymbol, Object stackSymbol) {

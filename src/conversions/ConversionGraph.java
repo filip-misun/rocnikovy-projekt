@@ -66,7 +66,10 @@ public class ConversionGraph {
 					Map<Class<? extends FiniteDescription>, Integer> distMap =
 							distMapList.get(i);
 					int w = distMap.get(tuple.get(i));
-					if (w == Integer.MAX_VALUE) continue;
+					if (w == Integer.MAX_VALUE){
+                                            sum = Integer.MAX_VALUE;
+                                            continue;
+                                        }
 					sum += w;
 				}
 				if (sum < minWeight) {

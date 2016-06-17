@@ -237,7 +237,9 @@ public class CFGrammar implements FiniteDescription{
                         newWord.add(w.symbolAt(i));
                     }
                 }
-                newRules.add(new Rule(r.nonterminal, new Word(newWord)));
+                if(newWord.size() > 0){
+                    newRules.add(new Rule(r.nonterminal, new Word(newWord)));
+                }
             }
         }
         /* We remove epsilon-rules. */
@@ -402,6 +404,7 @@ public class CFGrammar implements FiniteDescription{
      */
     public boolean accepts(Word w){
         CFGrammar g = this.strictChomsky();
+        //this.print(System.out);
         if(w.isEmpty()){
             return g.rules.contains(new Rule(g.startSymbol, Word.EMPTYWORD));
         }

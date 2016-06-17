@@ -1,12 +1,12 @@
 package conversions;
 
-import rocnikovyprojekt.CFGrammar;
-import rocnikovyprojekt.CFGrammar.Rule;
-import rocnikovyprojekt.FiniteDescription;
-import rocnikovyprojekt.PushdownAutomaton.Delta;
-import rocnikovyprojekt.PushdownAutomaton;
-import rocnikovyprojekt.Sets;
-import rocnikovyprojekt.Word;
+import languages.CFGrammar;
+import languages.CFGrammar.Rule;
+import languages.FiniteDescription;
+import languages.PushdownAutomaton.Delta;
+import languages.PushdownAutomaton;
+import sets.Sets;
+import languages.Word;
 
 /**
  *

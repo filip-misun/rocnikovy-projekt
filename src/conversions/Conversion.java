@@ -1,6 +1,6 @@
 package conversions;
 
-import rocnikovyprojekt.FiniteDescription;
+import languages.FiniteDescription;
 
 public interface Conversion {
     public FiniteDescription convert(FiniteDescription a);

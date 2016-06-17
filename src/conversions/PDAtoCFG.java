@@ -10,12 +10,12 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import rocnikovyprojekt.CFGrammar;
-import rocnikovyprojekt.CFGrammar.Rule;
-import rocnikovyprojekt.PushdownAutomaton.Delta.Output;
-import rocnikovyprojekt.FiniteDescription;
-import rocnikovyprojekt.PushdownAutomaton;
-import rocnikovyprojekt.Word;
+import languages.CFGrammar;
+import languages.CFGrammar.Rule;
+import languages.PushdownAutomaton.Delta.Output;
+import languages.FiniteDescription;
+import languages.PushdownAutomaton;
+import languages.Word;
 
 /**
  *

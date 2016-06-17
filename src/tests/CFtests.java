@@ -5,7 +5,9 @@
  */
 package tests;
 
-import rocnikovyprojekt.*;
+import languages.PushdownAutomaton;
+import languages.CFGrammar;
+import languages.Word;
 import conversions.*;
 import java.io.File;
 import java.io.FileNotFoundException;

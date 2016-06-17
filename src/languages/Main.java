@@ -1,4 +1,4 @@
-package rocnikovyprojekt;
+package languages;
 
 import conversions.Conversions;
 import java.io.File;

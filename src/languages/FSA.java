@@ -1,5 +1,8 @@
-package rocnikovyprojekt;
+package languages;
 
+import sets.Tuple;
+import sets.Sets;
+import sets.SetPartition;
 import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.HashSet;

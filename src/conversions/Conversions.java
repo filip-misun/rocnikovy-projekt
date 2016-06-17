@@ -3,13 +3,13 @@ package conversions;
 import com.google.common.reflect.ClassPath;
 import java.lang.reflect.InvocationTargetException;
 
-import rocnikovyprojekt.FiniteDescription;
+import languages.FiniteDescription;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import rocnikovyprojekt.Word;
+import languages.Word;
 
 public class Conversions {
 

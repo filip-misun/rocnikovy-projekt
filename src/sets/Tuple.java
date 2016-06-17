@@ -1,4 +1,4 @@
-package rocnikovyprojekt;
+package sets;
 
 public class Tuple<F, S> {
 

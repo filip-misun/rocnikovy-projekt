@@ -3,7 +3,7 @@ package conversions;
 import java.util.ArrayList;
 import java.util.List;
 
-import rocnikovyprojekt.FiniteDescription;
+import languages.FiniteDescription;
 
 /**
  * <p>

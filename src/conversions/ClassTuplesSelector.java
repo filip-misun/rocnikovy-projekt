@@ -2,7 +2,7 @@ package conversions;
 
 import java.util.List;
 
-import rocnikovyprojekt.FiniteDescription;
+import languages.FiniteDescription;
 
 /**
  * <p>

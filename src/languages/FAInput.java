@@ -1,4 +1,4 @@
-package rocnikovyprojekt;
+package languages;
 
 import java.util.Objects;
 

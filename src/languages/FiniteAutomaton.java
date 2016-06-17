@@ -1,4 +1,4 @@
-package rocnikovyprojekt;
+package languages;
 
 public class FiniteAutomaton implements FiniteDescription {
 	

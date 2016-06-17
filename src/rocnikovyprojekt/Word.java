@@ -1,5 +1,6 @@
 package rocnikovyprojekt;
 
+import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -94,6 +95,10 @@ public class Word {
             newWord.addAll(w.symbols);
             newWord.addAll(symbols.subList(index + 1, symbols.size()));
             return new Word(newWord);
+        }
+        
+        public Word reverse(){
+            return new Word(Lists.reverse(symbols));
         }
         
         @Override

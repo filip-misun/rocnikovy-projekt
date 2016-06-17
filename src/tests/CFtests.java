@@ -9,7 +9,11 @@ import rocnikovyprojekt.*;
 import conversions.*;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.zip.DataFormatException;
 
 /**
@@ -85,5 +89,10 @@ public class CFtests {
         System.out.println(g.accepts(new Word("(12+(05*62))")));
         System.out.println(g.accepts(new Word("((23+(10*10))*(1+(2+3302)))"))); //true
         System.out.println("Test finished.");
+    }
+    
+    public static void test8() throws FileNotFoundException, DataFormatException{
+        PushdownAutomaton a = new PushdownAutomaton(new Scanner(new File("pda1.txt")));
+        System.out.println(Conversions.accepts(a, new Word("ab")));
     }
 }

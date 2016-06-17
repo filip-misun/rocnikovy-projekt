@@ -12,11 +12,12 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.zip.DataFormatException;
 import tests.CFtests;
 
 public class Main {
 
-	public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException {
-            CFtests.test7();
+	public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException, DataFormatException {
+            CFtests.test8();
         }
 }

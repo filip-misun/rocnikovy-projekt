@@ -10,6 +10,11 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.zip.DataFormatException;
 
+/**
+ * Class representing push down automaton (PDA).
+ *
+ * @author Jozef Rajnik
+ */
 public class PushdownAutomaton implements FiniteDescription {
 
     private Set<Object> states;
@@ -19,6 +24,17 @@ public class PushdownAutomaton implements FiniteDescription {
     private Object stackStart;
     private Delta delta;
 
+    /**
+     * Initializes PDA from given parameters, which are stated in formal
+     * definition of PDA.
+     *
+     * @param K set of states
+     * @param Sigma input alphabet - symbols which automaton reads from tape.
+     * @param Gamma working alphabet - symbols which automaton puts to stack.
+     * @param d transition function
+     * @param q0 start state
+     * @param Z0 start symbol on stack
+     */
     public PushdownAutomaton(Set<Object> K, Set<Object> Sigma, Set<Object> Gamma,
             Delta d, Object q0, Object Z0) {
         states = K;
@@ -29,6 +45,15 @@ public class PushdownAutomaton implements FiniteDescription {
         stackStart = Z0;
     }
 
+    /**
+     * Initializes PDA from tranzition function, start state and start stack
+     * symbol. The set of states and alphabets are computed from transition
+     * function (as smallest possible sets).
+     *
+     * @param d transition function
+     * @param q0 start state
+     * @param Z0 start symbol on stack
+     */
     public PushdownAutomaton(Delta d, Object q0,
             Object Z0) {
         startState = q0;
@@ -62,6 +87,10 @@ public class PushdownAutomaton implements FiniteDescription {
         updateSets();
     }
 
+    /**
+     * Private method which computes set of states and alphabets from transition
+     * function.
+     */
     private void updateSets() {
         states = delta.getStates();
         states.add(startState);
@@ -70,6 +99,9 @@ public class PushdownAutomaton implements FiniteDescription {
         workingAlphabet.add(stackStart);
     }
 
+    /**
+     * Returns set of states of this automaton.
+     */
     public Set<Object> getStates() {
         return states;
     }
@@ -97,13 +129,16 @@ public class PushdownAutomaton implements FiniteDescription {
     /**
      * Prints this automaton to the specified PrintStream.
      *
-     * @param out
+     * @param out PrintStream which this automaton should be printed to.
      */
     public void print(PrintStream out) {
         out.println(startState + " " + stackStart);
         delta.print(out);
     }
 
+    /**
+     * Class representing configuration of PDA.
+     */
     public static class Configuration implements FiniteDescription {
 
         private Object state;
@@ -155,6 +190,9 @@ public class PushdownAutomaton implements FiniteDescription {
 
         }
 
+        /**
+         * Initializes delta function from scanner.
+         */
         public Delta(Scanner s) throws DataFormatException {
             while (s.hasNext()) {
                 String line = s.nextLine();
@@ -211,6 +249,14 @@ public class PushdownAutomaton implements FiniteDescription {
             map.put(in, outputs);
         }
 
+        /**
+         * Returns set of outputs corresponding to given parameters.
+         *
+         * @param state state of automaton
+         * @param tapeSymbol symbol read from input tape
+         * @param stackSymbol symol on the top of the stck
+         * @return
+         */
         public Set<Output> get(Object state, Object tapeSymbol, Object stackSymbol) {
             return map.getOrDefault(new Input(state, tapeSymbol, stackSymbol), new HashSet<>());
         }
@@ -223,6 +269,9 @@ public class PushdownAutomaton implements FiniteDescription {
             return map.entrySet();
         }
 
+        /**
+         * Returns all states contained in this transition function.
+         */
         public Set<Object> getStates() {
             Set<Object> states = new HashSet<>();
             for (Map.Entry<Input, Set<Output>> entry : map.entrySet()) {
@@ -231,6 +280,9 @@ public class PushdownAutomaton implements FiniteDescription {
             return states;
         }
 
+        /**
+         * Returns all input symbols contained in this transition function.
+         */
         public Set<Object> getAlphabet() {
             Set<Object> alphabet = new HashSet<>();
             for (Map.Entry<Input, Set<Output>> entry : map.entrySet()) {
@@ -239,6 +291,9 @@ public class PushdownAutomaton implements FiniteDescription {
             return alphabet;
         }
 
+        /**
+         * Returns all stack symbols contained in this transition function.
+         */
         public Set<Object> getWorkingAlphabet() {
             Set<Object> walphabet = new HashSet<>();
             for (Map.Entry<Input, Set<Output>> entry : map.entrySet()) {
@@ -252,78 +307,89 @@ public class PushdownAutomaton implements FiniteDescription {
                 out.println(entry.getKey() + " " + entry.getValue());
             }
         }
-        
+
+        /**
+         * Class representing Input of a transition function of a PDA.
+         */
         public static class Input {
-                    Object state;
-                    Object tapeSymbol;
-                    Object stackSymbol;
-                    
-                    public Input(Object state, Object tapeSymbol, Object stackSymbol){
-                        this.state = state;
-                        this.tapeSymbol = tapeSymbol;
-                        this.stackSymbol = stackSymbol;
-                    }
-                    
-                    @Override
-                    public boolean equals(Object o){
-                        if(o instanceof Input){
-                            Input in = (Input) o;
-                            return in.state.equals(this.state) && 
-                                    in.stackSymbol.equals(this.stackSymbol) &&
-                                    in.tapeSymbol.equals(this.tapeSymbol);
-                        }
-                        else return false;
-                    }
-                    
-                    @Override
-                    public int hashCode(){
-                        return Objects.hash(state, tapeSymbol, stackSymbol);
-                    }
-                    
-                    @Override
-                    public String toString(){
-                        return state + " " + tapeSymbol + " " + stackSymbol;
-                    }
+
+            Object state;
+            Object tapeSymbol;
+            Object stackSymbol;
+
+            public Input(Object state, Object tapeSymbol, Object stackSymbol) {
+                this.state = state;
+                this.tapeSymbol = tapeSymbol;
+                this.stackSymbol = stackSymbol;
+            }
+
+            @Override
+            public boolean equals(Object o) {
+                if (o instanceof Input) {
+                    Input in = (Input) o;
+                    return in.state.equals(this.state)
+                            && in.stackSymbol.equals(this.stackSymbol)
+                            && in.tapeSymbol.equals(this.tapeSymbol);
+                } else {
+                    return false;
                 }
-                
-		public static class Output {
-			
-			public Object newState;
-			public Word pushToStack;
-			
-			public Output(Object newState, Word pushToStack) {
-				this.newState = newState;
-				this.pushToStack = pushToStack;
-			}
-                        
-                        /**
-                         * Initializes Output form String.
-                         * The format of the string is (state;word).
-                         * @param s 
-                         */
-                        public Output(String s){
-                            String str = s.substring(1, s.length() - 1);
-                            newState = str.split(",")[0];
-                            pushToStack = new Word(str.split(",")[1].split(" "));
-                        }
-			
-			@Override
-			public boolean equals(Object obj) {
-				if (!(obj instanceof Output)) return false;
-				Output val = (Output) obj;
-				return this.newState.equals(val.newState) &&
-						this.pushToStack.equals(val.pushToStack);
-			}
-                        
-                        @Override
-                        public int hashCode(){
-                            return Objects.hash(newState, pushToStack);
-                        }
-                        
-                        @Override
-                        public String toString(){
-                            return "(" + newState + "," + pushToStack + ")";
-                        }
-		}
+            }
+
+            @Override
+            public int hashCode() {
+                return Objects.hash(state, tapeSymbol, stackSymbol);
+            }
+
+            @Override
+            public String toString() {
+                return state + " " + tapeSymbol + " " + stackSymbol;
+            }
+        }
+
+        /**
+         * Class representing Input of a transition function of a PDA.
+         */
+        public static class Output {
+
+            public Object newState;
+            public Word pushToStack;
+
+            public Output(Object newState, Word pushToStack) {
+                this.newState = newState;
+                this.pushToStack = pushToStack;
+            }
+
+            /**
+             * Initializes Output form String. The format of the string is
+             * (state;word).
+             *
+             * @param s
+             */
+            public Output(String s) {
+                String str = s.substring(1, s.length() - 1);
+                newState = str.split(",")[0];
+                pushToStack = new Word(str.split(",")[1].split(" "));
+            }
+
+            @Override
+            public boolean equals(Object obj) {
+                if (!(obj instanceof Output)) {
+                    return false;
+                }
+                Output val = (Output) obj;
+                return this.newState.equals(val.newState)
+                        && this.pushToStack.equals(val.pushToStack);
+            }
+
+            @Override
+            public int hashCode() {
+                return Objects.hash(newState, pushToStack);
+            }
+
+            @Override
+            public String toString() {
+                return "(" + newState + "," + pushToStack + ")";
+            }
+        }
     }
 }

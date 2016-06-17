@@ -5,10 +5,8 @@
  */
 package conversions;
 
-import com.google.common.collect.Lists;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import languages.CFGrammar;
 import languages.CFGrammar.Rule;
@@ -18,8 +16,8 @@ import languages.PushdownAutomaton;
 import languages.Word;
 
 /**
- *
- * @author Dodo
+ * Conversion from PDA to CFG.
+ * @author Jozef Rajnik
  */
 public class PDAtoCFG implements Conversion {
     

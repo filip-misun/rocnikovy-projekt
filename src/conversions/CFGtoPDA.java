@@ -5,11 +5,10 @@ import languages.CFGrammar.Rule;
 import languages.FiniteDescription;
 import languages.PushdownAutomaton.Delta;
 import languages.PushdownAutomaton;
-import sets.Sets;
 import languages.Word;
 
 /**
- *
+ * Conversion from PDA to CF grammar.
  * @author Jozef Rajník
  */
 public class CFGtoPDA implements Conversion{

@@ -93,6 +93,9 @@ public class CFtests {
     
     public static void test8() throws FileNotFoundException, DataFormatException{
         PushdownAutomaton a = new PushdownAutomaton(new Scanner(new File("pda1.txt")));
-        System.out.println(Conversions.accepts(a, new Word("ab")));
+        System.out.println(Conversions.accepts(a, new Word("aabb"))); //true
+        System.out.println(Conversions.accepts(a, new Word("aaaaaabbbbbb"))); //true
+        System.out.println(Conversions.accepts(a, new Word("aabbabaaabbb")));
+        System.out.println(Conversions.accepts(a, Word.EMPTYWORD)); //true
     }
 }

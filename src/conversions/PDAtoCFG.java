@@ -62,7 +62,7 @@ public class PDAtoCFG implements Conversion {
                                 if(!ch.equals(Word.EMPTYWORD)){
                                     w = new Word(Arrays.asList(ch));
                                 }
-                                makeRules(p, q, new Word(out.pushToStack), nonterm,
+                                makeRules(out.newState, q, new Word(out.pushToStack), nonterm,
                                         w);
                             }
                         }

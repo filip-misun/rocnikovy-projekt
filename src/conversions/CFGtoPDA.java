@@ -3,8 +3,8 @@ package conversions;
 import languages.CFGrammar;
 import languages.CFGrammar.Rule;
 import languages.FiniteDescription;
-import languages.PushdownAutomaton.Delta;
-import languages.PushdownAutomaton;
+import languages.PDA.Delta;
+import languages.PDA;
 import languages.Word;
 
 /**
@@ -24,7 +24,7 @@ public class CFGtoPDA implements Conversion{
         for(Object ch : g.getTerminals()){
             delta.add(state, ch, ch, state, Word.EPSILON);
         }
-        return new PushdownAutomaton(delta, state, state);
+        return new PDA(delta, state, state);
     }
 
     @Override
@@ -34,7 +34,7 @@ public class CFGtoPDA implements Conversion{
 
     @Override
     public Class<? extends FiniteDescription> getTo() {
-        return PushdownAutomaton.class;
+        return PDA.class;
     }
     
 }

@@ -10,9 +10,9 @@ import java.util.HashSet;
 import java.util.Set;
 import languages.CFGrammar;
 import languages.CFGrammar.Rule;
-import languages.PushdownAutomaton.Delta.Output;
+import languages.PDA.Delta.Output;
 import languages.FiniteDescription;
-import languages.PushdownAutomaton;
+import languages.PDA;
 import languages.Word;
 
 /**
@@ -26,7 +26,7 @@ public class PDAtoCFG implements Conversion {
 
     @Override
     public FiniteDescription convert(FiniteDescription a) {
-        PushdownAutomaton afrom = (PushdownAutomaton) a;
+        PDA afrom = (PDA) a;
         states = afrom.getStates();
         Set<Object> wa = afrom.getWorkingAlphabet();
         /* The set of rules of new grammar */
@@ -76,7 +76,7 @@ public class PDAtoCFG implements Conversion {
 
     @Override
     public Class<? extends FiniteDescription> getFrom() {
-        return PushdownAutomaton.class;
+        return PDA.class;
                 
     }
 

@@ -15,7 +15,7 @@ import java.util.zip.DataFormatException;
  *
  * @author Jozef Rajnik
  */
-public class PushdownAutomaton implements FiniteDescription {
+public class PDA implements FiniteDescription {
 
     private Set<Object> states;
     private Set<Object> alphabet;
@@ -35,7 +35,7 @@ public class PushdownAutomaton implements FiniteDescription {
      * @param q0 start state
      * @param Z0 start symbol on stack
      */
-    public PushdownAutomaton(Set<Object> K, Set<Object> Sigma, Set<Object> Gamma,
+    public PDA(Set<Object> K, Set<Object> Sigma, Set<Object> Gamma,
             Delta d, Object q0, Object Z0) {
         states = K;
         alphabet = Sigma;
@@ -54,7 +54,7 @@ public class PushdownAutomaton implements FiniteDescription {
      * @param q0 start state
      * @param Z0 start symbol on stack
      */
-    public PushdownAutomaton(Delta d, Object q0,
+    public PDA(Delta d, Object q0,
             Object Z0) {
         startState = q0;
         delta = d;
@@ -72,7 +72,7 @@ public class PushdownAutomaton implements FiniteDescription {
      * @param s Scanner, which automaton is initialized from.
      * @throws java.util.zip.DataFormatException if the file has wrong format.
      */
-    public PushdownAutomaton(Scanner s) throws DataFormatException {
+    public PDA(Scanner s) throws DataFormatException {
         String line = s.nextLine();
         while (line.startsWith("//")) {
             line = s.nextLine();

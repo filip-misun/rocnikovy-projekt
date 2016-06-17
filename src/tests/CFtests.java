@@ -5,7 +5,7 @@
  */
 package tests;
 
-import languages.PushdownAutomaton;
+import languages.PDA;
 import languages.CFGrammar;
 import languages.Word;
 import conversions.*;
@@ -25,7 +25,7 @@ import java.util.zip.DataFormatException;
 public class CFtests {
     public static void test1() throws DataFormatException, FileNotFoundException{
         Scanner s = new Scanner(new File("pda2.txt"));
-        PushdownAutomaton a = new PushdownAutomaton(s);
+        PDA a = new PDA(s);
         //System.out.println(a.getDelta().get("0", Word.EPSILON, "c"));
         CFGrammar G = (CFGrammar) Conversions.convert(a, CFGrammar.class);
         G.print(System.out);
@@ -93,7 +93,7 @@ public class CFtests {
         System.out.println("Test finished.");
     }
     
-    public static void test8() throws FileNotFoundException, DataFormatException{PushdownAutomaton a = new PushdownAutomaton(new Scanner(new File("pda1.txt")));
+    public static void test8() throws FileNotFoundException, DataFormatException{PDA a = new PDA(new Scanner(new File("pda1.txt")));
         System.out.println(Conversions.accepts(a, new Word("aabb"))); //true
         System.out.println(Conversions.accepts(a, new Word("aaaaaabbbbbb"))); //true
         System.out.println(Conversions.accepts(a, new Word("aabbabaaabbb")));

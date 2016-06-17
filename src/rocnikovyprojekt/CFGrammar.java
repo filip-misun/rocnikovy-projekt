@@ -19,11 +19,11 @@ import java.util.Set;
  * @author Jozef Rajnik
  */
 public class CFGrammar implements FiniteDescription{
-    Set<Object> nonterminals = new HashSet<>();
-    Set<Object> terminals = new HashSet<>();
-    Set<Rule> rules;
-    Map<Object, Set<Word>> rulesMap = null;
-    Object startSymbol;
+    private Set<Object> nonterminals = new HashSet<>();
+    private Set<Object> terminals = new HashSet<>();
+    private Set<Rule> rules;
+    private Map<Object, Set<Word>> rulesMap = null;
+    private Object startSymbol;
     
     public CFGrammar(Set<Object> N, Set<Object> T, Set<Rule> P, Object s){
         nonterminals = N;
@@ -67,6 +67,22 @@ public class CFGrammar implements FiniteDescription{
                 rules.add(new Rule(nonterm, w));
             }
         }
+    }
+    
+    public Set<Object> getNonterminals(){
+        return nonterminals;
+    }
+    
+    public Set<Object> getTerminals(){
+        return terminals;
+    }
+    
+    public Set<Rule> getRules(){
+        return rules;
+    }
+    
+    public Object getStartSymbol(){
+        return startSymbol;
     }
     
     /**
@@ -464,8 +480,8 @@ public class CFGrammar implements FiniteDescription{
      * and terminals on the left side.
      */
     public static class Rule {
-        Object nonterminal;
-        Word word;
+        public Object nonterminal;
+        public Word word;
         
         public Rule(Object n, Word w){
             nonterminal = n;

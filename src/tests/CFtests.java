@@ -24,7 +24,7 @@ public class CFtests {
     public static void test1() throws DataFormatException, FileNotFoundException{
         Scanner s = new Scanner(new File("pda2.txt"));
         PushdownAutomaton a = new PushdownAutomaton(s);
-        //System.out.println(a.getDelta().get("0", Word.EMPTYWORD, "c"));
+        //System.out.println(a.getDelta().get("0", Word.EPSILON, "c"));
         CFGrammar G = (CFGrammar) Conversions.convert(a, CFGrammar.class);
         G.print(System.out);
     }
@@ -73,7 +73,7 @@ public class CFtests {
         CFGrammar g = new CFGrammar(new Scanner(new File("cfg5.txt")));
         assert g.accepts(new Word("aabb")) == true; //true
         assert g.accepts(new Word("aabbb")) == false;
-        assert g.accepts(new Word(Word.EMPTYWORD)) == true; //true
+        assert g.accepts(new Word(Word.EPSILON)) == true; //true
         assert g.accepts(new Word("ababab")) == false;
         assert g.accepts(new Word("aaaaaaaaaabbbbbbbbbb")) == true; //true
         System.out.println("Test finished.");
@@ -84,7 +84,7 @@ public class CFtests {
         g.strictChomsky().print(System.out);
         System.out.println(g.accepts(new Word("((123+22)*2)"))); //true
         System.out.println(g.accepts(new Word("(1+1)"))); //true
-        System.out.println(g.accepts(new Word(Word.EMPTYWORD)));
+        System.out.println(g.accepts(new Word(Word.EPSILON)));
         System.out.println(g.accepts(new Word("1221201223221312"))); //true
         System.out.println(g.accepts(new Word("(12+(05*62))")));
         System.out.println(g.accepts(new Word("((23+(10*10))*(1+(2+3302)))"))); //true
@@ -95,6 +95,6 @@ public class CFtests {
         System.out.println(Conversions.accepts(a, new Word("aabb"))); //true
         System.out.println(Conversions.accepts(a, new Word("aaaaaabbbbbb"))); //true
         System.out.println(Conversions.accepts(a, new Word("aabbabaaabbb")));
-        System.out.println(Conversions.accepts(a, Word.EMPTYWORD)); //true
+        System.out.println(Conversions.accepts(a, Word.EPSILON)); //true
     }
 }

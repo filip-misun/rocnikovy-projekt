@@ -41,14 +41,14 @@ public class PDAtoCFG implements Conversion {
          * and each working symbol Z. We iterate through all such triplets
          * and for each such nonterminal we add rules into grammat;
          */
-        //System.out.println(afrom.getDelta().get("0", Word.EMPTYWORD, "c"));
+        //System.out.println(afrom.getDelta().get("0", Word.EPSILON, "c"));
         for(Object p : states){
             for(Object Z : wa){
                 for(Object q : states){
                     Object nonterm = Arrays.asList(p, Z, q);
                     nonterminals.add(nonterm);
                     //System.out.println(nonterm);
-                    //System.out.println(afrom.getDelta().get("0", Word.EMPTYWORD, "c"));
+                    //System.out.println(afrom.getDelta().get("0", Word.EPSILON, "c"));
                     for(Object ch : afrom.getAlphabet()){
                         //System.out.println(p + " " + ch + " " + Z + "->" + afrom.getDelta().get(p, ch, Z));
                         for(Output out : afrom.getDelta().get(p, ch, Z)){
@@ -58,8 +58,8 @@ public class PDAtoCFG implements Conversion {
                                             new Word(Arrays.asList(ch))));
                                 } 
                             } else {
-                                Word w = Word.EMPTYWORD;
-                                if(!ch.equals(Word.EMPTYWORD)){
+                                Word w = Word.EPSILON;
+                                if(!ch.equals(Word.EPSILON)){
                                     w = new Word(Arrays.asList(ch));
                                 }
                                 makeRules(out.newState, q, new Word(out.pushToStack), nonterm,

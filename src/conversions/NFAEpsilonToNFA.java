@@ -44,7 +44,7 @@ public class NFAEpsilonToNFA implements Conversion{
                 changed = false;
                 int before = tail.size();
                 for(Object p : tail){
-                    changed |= tail.addAll(afrom.getDelta().get(p, Word.EMPTYWORD));
+                    changed |= tail.addAll(afrom.getDelta().get(p, Word.EPSILON));
                 }
             }
             tails.put(state, tail);
@@ -90,7 +90,7 @@ public class NFAEpsilonToNFA implements Conversion{
         /* At last, we remove epsilon-moves */
         for(Iterator<Map.Entry<FAInput, Set<Object>>> it = delta.entrySet().iterator();
                 it.hasNext();){
-            if(it.next().getKey().symbol.equals(Word.EMPTYWORD)){
+            if(it.next().getKey().symbol.equals(Word.EPSILON)){
                 it.remove();
             }
         }

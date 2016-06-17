@@ -124,7 +124,7 @@ public class Conversions {
         FiniteDescription res = plan.executeInputConversion(0, a);
         try {
             Class<?> cl = (arg == null ? null : arg.getClass());
-            if(arg.equals(Word.EMPTYWORD)){
+            if(arg.equals(Word.EPSILON)){
                 cl = Word.class;
             }
             return (boolean) res.getClass().getMethod(problem, cl).invoke(res, arg);

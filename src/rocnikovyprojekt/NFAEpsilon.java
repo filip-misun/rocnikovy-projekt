@@ -23,7 +23,7 @@ public class NFAEpsilon extends NFA{
     @Override
     public Collection<Configuration> nextConfigurations(Configuration conf, Word word){
         ArrayList<Configuration> newConfigurations = new ArrayList<>();
-        for (Object state : transitionFunction.get(conf.getState(), Word.EMPTYWORD)) {
+        for (Object state : transitionFunction.get(conf.getState(), Word.EPSILON)) {
             newConfigurations.add(new Configuration(state, conf.getPosition()));
         }
         newConfigurations.addAll(super.nextConfigurations(conf, word));

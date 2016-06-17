@@ -8,7 +8,7 @@ import java.util.List;
 
 public class Word {
 	
-	public final static Word EMPTYWORD = new Word(){
+	public final static Word EPSILON = new Word(){
             @Override
             public String toString(){
                 return "epsilon";

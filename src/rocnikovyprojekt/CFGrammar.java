@@ -60,7 +60,7 @@ public class CFGrammar implements FiniteDescription{
             }
             Object nonterm = args[0];
             for(String word : args[1].split(" \\| ")){
-                Word w = Word.EMPTYWORD;
+                Word w = Word.EPSILON;
                 if(!word.equals("epsilon")){
                     w = new Word(Arrays.asList(word.split(" ")));
                 }
@@ -252,7 +252,7 @@ public class CFGrammar implements FiniteDescription{
         /* For equivalence with formrer grammar, we add rule
          * startSymbol -> epsilon, if necesarry. */
         if(nullable.contains(startSymbol)){
-            newRules.add(new Rule(startSymbol, Word.EMPTYWORD));
+            newRules.add(new Rule(startSymbol, Word.EPSILON));
         }
         return new CFGrammar(nonterminals, terminals, newRules, startSymbol);
     }
@@ -280,7 +280,7 @@ public class CFGrammar implements FiniteDescription{
             }
             /* To too short rules we add one nonterminal. */
             if(symbols.size() == 1){
-                symbols.add(new Tuple(-1, Word.EMPTYWORD));
+                symbols.add(new Tuple(-1, Word.EPSILON));
             }
             newRules.add(new Rule(r.nonterminal, new Word(symbols)));
         }
@@ -313,9 +313,9 @@ public class CFGrammar implements FiniteDescription{
             newRules.add(new Rule(new Tuple(-1, ch), new Word(ch)));
         }
         /* Same for (-1,epsilon) */
-        Object nonterm = new Tuple(-1, Word.EMPTYWORD);
+        Object nonterm = new Tuple(-1, Word.EPSILON);
         N.add(nonterm);
-        newRules.add(new Rule(new Tuple(-1, Word.EMPTYWORD), Word.EMPTYWORD));
+        newRules.add(new Rule(new Tuple(-1, Word.EPSILON), Word.EPSILON));
         return new CFGrammar(N, terminals, newRules, startSymbol);
     }
     
@@ -405,7 +405,7 @@ public class CFGrammar implements FiniteDescription{
     public boolean accepts(Word w){
         CFGrammar g = this.strictChomsky();
         if(w.isEmpty()){
-            return g.rules.contains(new Rule(g.startSymbol, Word.EMPTYWORD));
+            return g.rules.contains(new Rule(g.startSymbol, Word.EPSILON));
         }
         int len = w.length();
         ArrayList<ArrayList<Set<Object>>> N = new ArrayList<>();

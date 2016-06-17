@@ -52,7 +52,7 @@ public class NFA implements FiniteDescription {
 			}
 			visited.add(conf);
                         queue.addAll(nextConfigurations(conf,word));
-//			for (Object state : transitionFunction.get(conf.getState(), Word.EMPTYWORD)) {
+//			for (Object state : transitionFunction.get(conf.getState(), Word.EPSILON)) {
 //				queue.add(new Configuration(state, conf.getPosition()));
 //			}
 		}
@@ -115,7 +115,7 @@ public class NFA implements FiniteDescription {
                         String[] line = s.nextLine().split(" ");
                         Object character = line[1];
                         if(line[1].toLowerCase().equals("epsilon")){
-                            character = Word.EMPTYWORD;
+                            character = Word.EPSILON;
                         }
                         HashSet<Object> set = new HashSet<>();
                         if(line[2].charAt(0) == '[' &&

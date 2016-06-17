@@ -20,10 +20,10 @@ public class CFGtoPDA implements Conversion{
         PDAdelta delta = new PDAdelta();
         Object state = g.getStartSymbol();
         for(Rule r : g.getRules()){
-            delta.add(state, Word.EMPTYWORD, r.nonterminal, state, r.word.reverse());
+            delta.add(state, Word.EPSILON, r.nonterminal, state, r.word.reverse());
         }
         for(Object ch : g.getTerminals()){
-            delta.add(state, ch, ch, state, Word.EMPTYWORD);
+            delta.add(state, ch, ch, state, Word.EPSILON);
         }
         return new PushdownAutomaton(delta, state, state);
     }

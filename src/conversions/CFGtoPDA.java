@@ -3,7 +3,7 @@ package conversions;
 import rocnikovyprojekt.CFGrammar;
 import rocnikovyprojekt.CFGrammar.Rule;
 import rocnikovyprojekt.FiniteDescription;
-import rocnikovyprojekt.PDAdelta;
+import rocnikovyprojekt.PushdownAutomaton.Delta;
 import rocnikovyprojekt.PushdownAutomaton;
 import rocnikovyprojekt.Sets;
 import rocnikovyprojekt.Word;
@@ -17,7 +17,7 @@ public class CFGtoPDA implements Conversion{
     @Override
     public FiniteDescription convert(FiniteDescription a) {
         CFGrammar g = (CFGrammar) a;
-        PDAdelta delta = new PDAdelta();
+        Delta delta = new Delta();
         Object state = g.getStartSymbol();
         for(Rule r : g.getRules()){
             delta.add(state, Word.EPSILON, r.nonterminal, state, r.word.reverse());

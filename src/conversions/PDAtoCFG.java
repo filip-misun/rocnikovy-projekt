@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Set;
 import rocnikovyprojekt.CFGrammar;
 import rocnikovyprojekt.CFGrammar.Rule;
-import rocnikovyprojekt.DeterministicPushdownAutomaton.TransitionFunction.Output;
+import rocnikovyprojekt.PushdownAutomaton.Delta.Output;
 import rocnikovyprojekt.FiniteDescription;
 import rocnikovyprojekt.PushdownAutomaton;
 import rocnikovyprojekt.Word;

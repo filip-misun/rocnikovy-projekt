@@ -98,8 +98,8 @@ public class Conversions {
         FiniteDescription res = plan.executeInputConversion(0, from);
         return res;
     }
-
-    public static boolean accepts(FiniteDescription a, Word w) {
+    
+    private static boolean unaryProblem(FiniteDescription a, String problem, Object arg) {
         ConversionRequest request = new ConversionRequest();
         List<Class<? extends FiniteDescription>> inputClasses = new ArrayList<>();
         inputClasses.add(a.getClass());
@@ -108,7 +108,7 @@ public class Conversions {
             @Override
             public boolean selects(List<Class<? extends FiniteDescription>> tuple) {
                 try {
-                    tuple.get(0).getMethod("accepts", Word.class);
+                    tuple.get(0).getMethod(problem, Word.class);
                 } catch (NoSuchMethodException ex) {
                     return false;
                 } catch (SecurityException ex) {
@@ -123,17 +123,31 @@ public class Conversions {
         }
         FiniteDescription res = plan.executeInputConversion(0, a);
         try {
-            return (boolean) res.getClass().getMethod("accepts", Word.class).invoke(res, w);
-        } catch (NoSuchMethodException ex) {
-            Logger.getLogger(Conversions.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(Conversions.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalArgumentException ex) {
-            Logger.getLogger(Conversions.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InvocationTargetException ex) {
+            Class<?> cl = (arg == null ? null : arg.getClass());
+            if(arg.equals(Word.EMPTYWORD)){
+                cl = Word.class;
+            }
+            return (boolean) res.getClass().getMethod(problem, cl).invoke(res, arg);
+        } catch (NoSuchMethodException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             Logger.getLogger(Conversions.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
+    }
+    
+    public static boolean accepts(FiniteDescription a, Word w){
+        return unaryProblem(a, "accepts", w);
+    }
+    
+    public static boolean isEmpty(FiniteDescription a){
+        return unaryProblem(a, "isEmpty", null);
+    }
+    
+    public static boolean isFull(FiniteDescription a){
+        return unaryProblem(a, "isFull", null);
+    }
+    
+    public static boolean isFinite(FiniteDescription a){
+        return unaryProblem(a, "isFinite", null);
     }
 
 }

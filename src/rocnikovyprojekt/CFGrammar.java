@@ -404,7 +404,6 @@ public class CFGrammar implements FiniteDescription{
      */
     public boolean accepts(Word w){
         CFGrammar g = this.strictChomsky();
-        //this.print(System.out);
         if(w.isEmpty()){
             return g.rules.contains(new Rule(g.startSymbol, Word.EMPTYWORD));
         }

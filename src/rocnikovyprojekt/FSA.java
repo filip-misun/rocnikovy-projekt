@@ -1,7 +1,6 @@
 package rocnikovyprojekt;
 
 import java.io.PrintStream;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -12,13 +11,14 @@ import java.util.Set;
 
 public class FSA implements FiniteDescription {
 
-	private Set<Object> states, symbols, initialStates, finalStates, symbolsAndEpsilon;
+	private Set<Object> states, symbols, initialStates, finalStates;
+	private Set<Object> symbolsAndEpsilon;
 	private Delta delta;
 	
 	public FSA(Set<Object> states, Set<Object> symbols, Delta delta,
 			Set<Object> initialStates, Set<Object> finalStates) {
 		
-		this.states =states;
+		this.states = states;
 		this.symbols = symbols;
 		this.initialStates = initialStates;
 		this.finalStates = finalStates;
@@ -26,50 +26,102 @@ public class FSA implements FiniteDescription {
 		symbolsAndEpsilon = new HashSet<Object>(symbols);
 		symbolsAndEpsilon.add(Word.EMPTYWORD);		
 	}
-		
+
 	/**
-         * Initializes FSA from a given Scanner.
-         * The inut format is following:
-         * - first line contains start states (space-separated),
-         * - second line contains final states (space-separated),
-         * - following lines contain lines of transition function.
-         * One line of transition function is of format
-         * cstate character [state, state, ..., state],
-         * where cstate is current state, character is charecter read from 
-         * the tape and [state, ..., state] is set of new states.
-         * @param s 
-         */
+	 * FSA is initialized from the input to the scanner. Format of the input is
+	 * as follows:
+	 *  - 1.line: states of the FSA separated by space
+	 *  - 2.line: symbols of the FSA separated by space
+	 *  - 3.line: initial states of the FSA separated by space
+	 *  - 4.line: final states of the FSA separated by space
+	 *  - the remaining lines define the transition function, each line has the
+	 *    following format: p a -> q1 q2 q3 ... - this means, that FSA has
+	 *    transitions from the state p on symbol a to states q1, q2, q3, ...
+	 */
 	public FSA(Scanner s) {
-		String line = s.nextLine();
-                initialStates = new HashSet<>(Arrays.asList(line.split(" ")));
-                line = s.nextLine();
-		finalStates = new HashSet<>(Arrays.asList(line.split(" ")));
-                delta = new Delta(s);
+		states = new HashSet<>();
+		for (String str : s.nextLine().split(" ")) {
+			states.add(str);
+		}
+		
+		symbols = new HashSet<>();
+		for (String str : s.nextLine().split(" ")) {
+			symbols.add(str);
+		}
+		
+		initialStates = new HashSet<>();
+		for (String str : s.nextLine().split(" ")) {
+			initialStates.add(str);
+		}
+		
+		finalStates = new HashSet<>();
+		for (String str : s.nextLine().split(" ")) {
+			finalStates.add(str);
+		}
+		
+		delta = new Delta();
+        while(s.hasNext()){
+        	String line = s.nextLine();
+            String[] args = line.split(" -> ");
+            if(args.length < 2) continue;
+            
+            String input[] = args[0].split(" ");
+            if (input.length != 2) continue;
+            String p = input[0];
+            String a = input[1];
+            
+            Set<Object> output = new HashSet<>();
+            for (String q : args[1].split(" ")) {
+            	output.add(q);
+            }
+            
+            delta.put(p, a, output);
+        }
+        
+		symbolsAndEpsilon = new HashSet<Object>(symbols);
+		symbolsAndEpsilon.add(Word.EMPTYWORD);
 	}
-	
-	
+
+	/**
+	 * Returns the initial states of the FSA.
+	 */
 	public Set<Object> getInitialStates() {
 		return initialStates;
 	}
 
+	/**
+	 * Returns the final states of the FSA.
+	 */
 	public Set<Object> getFinalStates() {
 		return finalStates;
 	}
 
+	/**
+	 * Returns the transition function of the FSA.
+	 */
 	public Delta getDelta() {
 		return delta;
 	}
 
+	/**
+	 * Returns the symbols of the FSA.
+	 */
 	public Set<Object> getSymbols() {
 		return symbols;
 	}
 	
+	/**
+	 * Returns the states of the FSA.
+	 */
 	public Set<Object> getStates() {
 		return states;
 	}
 	
+	/**
+	 * Returns {@code true}, if the word w is accepted by the FSA.
+	 */
 	public boolean accepts(Word w) {
-		FSA m = determinize().complete();
+		FSA m = determinize();
 		
 		Object p = m.initialStates.iterator().next();
 		
@@ -81,18 +133,117 @@ public class FSA implements FiniteDescription {
 		return m.finalStates.contains(p);
 	}
 	
+	/**
+	 * Returns an equivalent FSA, which contains no transitions on the empty
+	 * word. 
+	 */
 	public FSA epsilonFree() {
-		// TODO
-		return null;
+		Set<Object> Q = states;
+		Set<Object> A = symbols;
+		Delta D = new Delta();
+		Set<Object> I = new HashSet<>();
+		Set<Object> T = finalStates;
+
+		/*
+		 * Map which contains for each state q of FSA its epsilon tail, i.e.
+		 * states p such that FSA can move from state q to state p on empty
+		 * word.
+		 */
+		HashMap<Object, Set<Object>> tails = new HashMap<>();
+		
+		// We compute for each state its epsilon tail.
+		for (Object p : states) {
+			Set<Object> tail = new HashSet<>();
+			Queue<Object> queue = new LinkedList<>();
+			tail.add(p);
+			queue.add(p);
+			
+			while (!queue.isEmpty()) {
+				Object q = queue.remove();
+				for (Object r : delta.get(q, Word.EMPTYWORD)) {
+					if (tail.contains(r)) continue;
+					tail.add(r);
+					queue.add(r);
+				}
+			}
+			
+			tails.put(p, tail);
+		}
+		
+		for (Object p : states) {
+			for (Object a : symbols) {
+				Set<Object> val = delta.get(p, a);
+				Set<Object> newVal = new HashSet<>();
+				for (Object q : val) {
+					newVal.addAll(tails.get(q));
+				}
+				D.put(p, a, newVal);
+			}
+		}
+		
+		for (Object p : initialStates) {
+			I.addAll(tails.get(p));
+		}
+
+		return new FSA(Q, A, D, I, T);
 	}
 	
+	/**
+	 * Returns an equivalent FSA, which is deterministic, contains no
+	 * transitions on empty word and its transition function is complete.
+	 */	
 	public FSA determinize() {
-		// TODO
-		return null;
+		FSA m = epsilonFree();
+		
+		Set<Object> Q = new HashSet<>();
+		Set<Object> A = m.symbols;
+		Delta D = new Delta();
+		Set<Object> I = Sets.singleton(m.initialStates);
+		Set<Object> T = new HashSet<>();
+
+		Set<Set<Object>> checked = new HashSet<>();
+		Queue<Set<Object>> queue = new LinkedList<>();
+		queue.add(m.initialStates);
+		while (!queue.isEmpty()) {
+			Set<Object> currState = queue.remove();
+			if (checked.contains(currState)) continue;
+			checked.add(currState);
+			Q.add(currState);
+
+			for (Object a : m.symbols) {
+				Set<Object> newState = new HashSet<>();
+				for (Object p : currState) {
+					newState.addAll(m.delta.get(p, a));
+					if (m.finalStates.contains(p)) {
+						T.add(currState);
+					}
+				}
+				D.put(currState, a, Sets.singleton(newState));
+				queue.add(newState);
+			}
+		}
+
+		return new FSA(Q, A, D, I, T);
 	}
-	
+
+	/**
+	 * Returns a string of the form "name<i>n</i>", where <i>n</i> is some
+	 * number. It is guaranteed, that the FSA contains no state, which is equal
+	 * to this string.
+	 */
+	private Object newState(String name) {
+		int i = 1;
+		while (true) {
+			if (!states.contains(name + i)) break;
+		}
+		return name + i;
+	}	
+
+	/**
+	 * Returns an equivalent FSA, which has single initial state.
+	 */
 	public FSA singleInitialState() {
-		Object init = new Object();
+		Object init = newState("i");
 		
 		Set<Object> Q = Sets.union(states, init);
 		Set<Object> A = symbols;
@@ -106,7 +257,11 @@ public class FSA implements FiniteDescription {
 		return new FSA(Q, A, D, I, T);
 	}
 	
-	
+	/**
+	 * Returns an equivalent FSA, whose states are replaced by other objects.
+	 * @param map - defines the renaming. If (<i>p</i>, <i>q</i>) is an entry
+	 * in {@code map}, state <i>p</i> is replaced by state <i>q</i>.
+	 */
 	public FSA renameStates(Map<Object, Object> map) {
 		Set<Object> Q = Sets.translateSet(states, map);
 		Set<Object> A = symbols;
@@ -125,6 +280,10 @@ public class FSA implements FiniteDescription {
 		return new FSA(Q, A, D, I, T);
 	}
 	
+	/**
+	 * Returns a FSA, whose language is equivalent to the union of languages of
+	 * {@code this} and {@code m}.
+	 */
 	public FSA union(FSA m) {
 		Map<Object, Object> map1 = new HashMap<>();
 		Map<Object, Object> map2 = new HashMap<>();
@@ -162,6 +321,10 @@ public class FSA implements FiniteDescription {
 		return new FSA(Q, A, D, I, T);
 	}
 	
+	/**
+	 * Returns a FSA, whose language is equivalent to the intersection of
+	 * languages of {@code this} and {@code m}.
+	 */	
 	public FSA intersection(FSA m) {
 		FSA m1 = this;
 		FSA m2 = m;
@@ -190,7 +353,11 @@ public class FSA implements FiniteDescription {
 		
 		return new FSA(Q, A, D, I, T);
 	}
-	
+
+	/**
+	 * Returns a FSA, whose language is equivalent to the product of
+	 * languages of {@code this} and {@code m} in this order.
+	 */	
 	public FSA product(FSA m) {
 		Map<Object, Object> map1 = new HashMap<>();
 		Map<Object, Object> map2 = new HashMap<>();
@@ -227,12 +394,16 @@ public class FSA implements FiniteDescription {
 		
 		for (Object p : m1.finalStates) {
 			Set<Object> val = m1.delta.get(p, Word.EMPTYWORD);
-			D.put(p, Word.EMPTYWORD, Sets.union(val, m1.initialStates));
+			D.put(p, Word.EMPTYWORD, Sets.union(val, m2.initialStates));
 		}
 		
 		return new FSA(Q, A, D, I, T);
 	}
-	
+
+	/**
+	 * Returns a FSA, whose language is equivalent to the iteration of the
+	 * language of {@code this}.
+	 */		
 	public FSA iteration() {
 		FSA m = singleInitialState();
 		
@@ -249,19 +420,29 @@ public class FSA implements FiniteDescription {
 
 		return new FSA(Q, A, D, I, T);
 	}
-	
+
+	/**
+	 * Returns a FSA, whose language is equivalent to the complement of the
+	 * language of {@code this}.
+	 */		
 	public FSA complement() {
-		FSA m = determinize().complete();
+		FSA m = determinize();
 		
 		Set<Object> Q = m.states;
 		Set<Object> A = m.symbols;
 		Delta D = m.delta;
 		Set<Object> I = m.initialStates;
-		Set<Object> T = Sets.difference(Q, m.finalStates);
+		Set<Object> T = Sets.difference(m.states, m.finalStates);
 		
 		return new FSA(Q, A, D, I, T);
 	}
-	
+
+	/**
+	 * Returns a transition function, such that if <i>p</i> is a state and
+	 * <i>a</i> is a symbol, the output for the input (<i>p</i>, <i>a</i>) is
+	 * a set of such a states <i>q</i>, so that this FSA has a transition from
+	 * state <i>q</i> on symbol <i>a</i> to state <i>p</i>.
+	 */		
 	private Delta reverseDelta() {
 		Delta D = new Delta();
 		for (Object p : states) {
@@ -270,12 +451,17 @@ public class FSA implements FiniteDescription {
 				for (Object q : val) {
 					Set<Object> v = D.get(q, a);
 					v.add(p);
+					D.put(q, a, v);
 				}
 			}
 		}
 		return D;
 	}
-	
+
+	/**
+	 * Returns a FSA, whose language is equivalent to the reverse of the
+	 * language of {@code this}.
+	 */
 	public FSA reverse() {
 		Set<Object> Q = states;
 		Set<Object> A = symbols;
@@ -286,11 +472,14 @@ public class FSA implements FiniteDescription {
 		return new FSA(Q, A, D, I, T);
 	}
 
+	/**
+	 * Returns all the accessible states of this FSA. A state is accessible, if
+	 * it can be reached by some sequence of transition from some initial state.
+	 */
 	public Set<Object> accessibleStates() {
-		Queue<Object> queue = new LinkedList<>();
 		Set<Object> accessible = new HashSet<>(initialStates);
-		queue.add(initialStates);
-		
+		Queue<Object> queue = new LinkedList<>(initialStates);
+
 		while (!queue.isEmpty()) {
 			Object p = queue.remove();			
 			for (Object a : symbolsAndEpsilon) {
@@ -304,15 +493,30 @@ public class FSA implements FiniteDescription {
 		
 		return accessible;
 	}
-	
+
+	/**
+	 * Returns all the coaccessible states of this FSA. A state is coaccessible,
+	 * if some final state can be reached by some sequence of transition from
+	 * this state.
+	 */	
 	public Set<Object> coaccessibleStates() {
 		return reverse().accessibleStates();
 	}
-	
+
+	/**
+	 * Returns all the useful states of this FSA. A state is useful, if it is
+	 * accessible and coaccessible at the same time, i.e. it can be reached from
+	 * some initial state by some sequence of transitions and some final states
+	 * can be reached from this state by some sequence of transitions.
+	 */	
 	public Set<Object> usefulStates() {
 		return Sets.intersection(accessibleStates(), coaccessibleStates());
 	}
 	
+	/**
+	 * Returns an equivalent FSA, which has only useful states (see {@link
+	 * usefulStates}).
+	 */
 	public FSA trim() {		
 		Set<Object> Q = usefulStates();
 		Set<Object> A = symbols;
@@ -330,8 +534,13 @@ public class FSA implements FiniteDescription {
 		return new FSA(Q, A, D, I, T);
 	}
 	
+	/**
+	 * Returns an equivalent FSA, whose transition function is complete, i.e.
+	 * for each state <i>p</i> and each symbol <i>a</i> there is a transition
+	 * from <i>p</i> on <i>a</i>.
+	 */
 	public FSA complete() {
-		Object trash = new Object();
+		Object trash = newState("trash");
 		
 		Set<Object> Q = Sets.union(states, trash);
 		Set<Object> A = symbols;
@@ -359,7 +568,12 @@ public class FSA implements FiniteDescription {
 		return new FSA(Q, A, D, I, T);		
 	}
 	
-	private Set<Object> translateStates(Delta delta, Set<Object> states, Object symbol) {
+	/**
+	 * Returns states, which can be reached by a single transitions from some
+	 * state from {@code states} on the symbol {@code symbol}.
+	 */
+	private Set<Object> translateStates(Delta delta, Set<Object> states,
+			Object symbol) {
 		Set<Object> s = new HashSet<>();
 		for (Object p : states) {
 			Set<Object> val = delta.get(p, symbol);
@@ -367,9 +581,15 @@ public class FSA implements FiniteDescription {
 		}
 		return s;
 	}
-	
+
+	/**
+	 * Returns an equivalent FSA, which is deterministic, has no transitions on
+	 * the empty word, its transition function is complete and the number of
+	 * its states is minimal. The method is an implementation of the Hopcroft's
+	 * algorithm.
+	 */	
 	public FSA minimize() {
-		FSA m = determinize().complete();
+		FSA m = determinize();
 		
 		Delta rD = m.reverseDelta();
 		
@@ -377,16 +597,14 @@ public class FSA implements FiniteDescription {
 		Set<Tuple<Integer, Object>> inW = new HashSet<>();
 		SetPartition P = new SetPartition(m.states);
 		
-		int k1 = m.finalStates.size();
-		int k2 = m.states.size() - m.finalStates.size();
-		
-		if (k1 == 0 || k2 == 0) {
-			
-		} else {
+		int k1 = m.states.size() - m.finalStates.size();
+		int k2 = m.finalStates.size();
+
+		if (k1 != 0 && k2 != 0) {
 			P.split(m.finalStates);
 			int j = (k1 < k2) ? 0 : 1;
 			
-			for (Object a : symbols) {
+			for (Object a : m.symbols) {
 				Tuple<Integer, Object> t = new Tuple<>(j, a);
 				W.add(t);
 				inW.add(t);
@@ -394,6 +612,7 @@ public class FSA implements FiniteDescription {
 			
 			while (!W.isEmpty()) {
 				Tuple<Integer, Object> tpl = W.remove();
+				inW.remove(tpl);
 				Set<Object> s = P.getSet(tpl.first);
 				Object b = tpl.second;
 				
@@ -402,17 +621,17 @@ public class FSA implements FiniteDescription {
 					int j1 = t.first;
 					int j2 = t.second;
 					
-					for (Object a : symbols) {
-						tpl = new Tuple<>(j1, a);
-						if (inW.contains(tpl)) {
-							tpl = new Tuple<>(j2, a);
-							W.add(tpl);
-							inW.add(tpl);
+					for (Object a : m.symbols) {
+						Tuple<Integer, Object> tpl1 = new Tuple<>(j1, a);
+						if (inW.contains(tpl1)) {
+							Tuple<Integer, Object> tpl2 = new Tuple<>(j2, a);
+							W.add(tpl2);
+							inW.add(tpl2);
 						} else {
 							int i = (P.getSet(j1).size() < P.getSet(j2).size()) ? j1 : j2;
-							tpl = new Tuple<>(i, a);
-							W.add(tpl);
-							inW.add(tpl);
+							Tuple<Integer, Object> tpl2 = new Tuple<>(i, a);
+							W.add(tpl2);
+							inW.add(tpl2);
 						}
 					}
 				}
@@ -420,7 +639,7 @@ public class FSA implements FiniteDescription {
 		}
 		
 		Set<Object> Q = new HashSet<>();
-		Set<Object> A = symbols;
+		Set<Object> A = m.symbols;
 		Delta D = new Delta();
 		Set<Object> I;
 		Set<Object> T = new HashSet<>();
@@ -428,13 +647,13 @@ public class FSA implements FiniteDescription {
 		for (Set<Object> s : P.getAllSets()) {
 			Q.add(s);
 			Object p = s.iterator().next();
-			if (finalStates.contains(p)) T.add(s);
+			if (m.finalStates.contains(p)) T.add(s);
 			
-			for (Object a : symbols) {
+			for (Object a : m.symbols) {
 				Set<Object> val = m.delta.get(p, a);
 				Object q = val.iterator().next();
 				Set<Object> r = P.findSet(q);
-				D.put(s, a, r);
+				D.put(s, a, Sets.singleton(r));
 			}
 		}
 		
@@ -444,20 +663,31 @@ public class FSA implements FiniteDescription {
 		return new FSA(Q, A, D, I, T);
 	}
 	
+	/**
+	 * Returns {@code true}, if the language accepted by this FSA is empty.
+	 */
 	public boolean isEmpty() {
-		return Sets.intersects(accessibleStates(), finalStates);
+		return !Sets.intersects(accessibleStates(), finalStates);
 	}
 	
-	// TODO: Ako nazvat tuto funkciu?
+	/**
+	 * Returns {@code true}, if every word generated by the symbols of this FSA
+	 * is accepted by this FSA.
+	 */
 	public boolean isFull() {
 		return complement().isEmpty();
 	}
 	
+	/**
+	 * Returns {@code true}, if 
+	 */
 	private boolean findCycle(Object p, Map<Object, Integer> visited) {
-		int v = visited.get(p);
+		Integer v = visited.get(p);
 
-		if (v == 1) return false;
-		if (v == 2) return true;
+		if (v != null) {
+			if (v.equals(1)) return false;
+			if (v.equals(2)) return true;
+		}
 		
 		visited.put(p, 2);
 		
@@ -471,36 +701,45 @@ public class FSA implements FiniteDescription {
 		return false;
 	}
 	
+	/**
+	 * Returns {@code true}, if the language accepted by this FSA is finite.
+	 */
 	public boolean isFinite() {
 		FSA m = singleInitialState().epsilonFree().trim();
 		Object init = m.initialStates.iterator().next();
 		return !m.findCycle(init, new HashMap<Object, Integer>());
 	}
-	
+
+	/**
+	 * Returns {@code true}, if the language accepted by this FSA intersects
+	 * the language accepted by FSA {@code m}.
+	 */
 	public boolean intersects(FSA m) {
 		return !intersection(m).isEmpty();
 	}
-		
+	
+	/**
+	 * Returns {@code true}, if the language accepted by this FSA is a subset of
+	 * the language accepted by FSA {@code m}.
+	 */
 	public boolean isSubsetOf(FSA m) {
 		return !intersects(m.complement());
 	}
-	
+
+	/**
+	 * Returns {@code true}, if the language accepted by this FSA is a equal to
+	 * the language accepted by FSA {@code m}.
+	 */	
 	public boolean isEquivalentTo(FSA m) {
 		return this.isSubsetOf(m) && m.isSubsetOf(this);
 	}
 	
-	/**
-	 * Prints text representation of this DFA to specified PrintStream. It
-	 * prints this DFA as following: start state space-separeted final states
-	 * lines with transition funcion (see TransitionFunction.print)
-	 * 
-	 * @param out
-	 *            PrintStream which this shoud be printed to.
-	 */
 	public void print(PrintStream out) {
+		out.println(Sets.toString(states));
+		out.println(Sets.toString(symbols));
 		out.println(Sets.toString(initialStates));
 		out.println(Sets.toString(finalStates));
-		delta.print(out);
+		out.println(delta);
 	}
 
 	public static class Delta {
@@ -509,25 +748,6 @@ public class FSA implements FiniteDescription {
 
 		public Delta() {
 		}
-		
-		public Delta(Scanner s){
-                    while(s.hasNext()){
-                        String[] line = s.nextLine().split(" ");
-                        Object character = line[1];
-                        if(line[1].toLowerCase().equals("epsilon")){
-                            character = Word.EMPTYWORD;
-                        }
-                        HashSet<Object> set = new HashSet<>();
-                        if(line[2].charAt(0) == '[' &&
-                                line[2].charAt(line[2].length() - 1) == ']'){
-                            String arg2 = new String(line[2].toCharArray(), 1, line[2].length() - 2);
-                            set.addAll(Arrays.asList(arg2.split(", ")));
-                        } else {
-                            set.add(line[2]);
-                        }
-                        put(line[0], character, set);
-                    }
-                }
 		
 		public Delta(HashMap<FAInput, Set<Object>> map) {
 			this.map = map;
@@ -550,21 +770,14 @@ public class FSA implements FiniteDescription {
 			return new Delta(new HashMap<>(map));
 		}
 
-		/**
-		 * Prints string representation of transition function to specified
-		 * PrintStream. The printed string consists of several lines. Each line
-		 * contains input state, read character and output state.
-		 * 
-		 * @param out
-		 *            PrintStream which this shoud be printed to.
-		 */
-		public void print(PrintStream out) {
+		public String toString() {
+			StringBuilder sb = new StringBuilder();
 			for (Map.Entry<FAInput, Set<Object>> entry : map.entrySet()) {
-				out.println(entry.getKey().state + " " + entry.getKey().symbol
-						+ " " + entry.getValue());
+				if (entry.getValue().isEmpty()) continue;
+				sb.append(entry.getKey().state + " " + entry.getKey().symbol
+						+ " -> " + Sets.toString(entry.getValue()) + "\n");
 			}
-			out.flush();
+			return sb.toString();
 		}
 	}
-
 }
